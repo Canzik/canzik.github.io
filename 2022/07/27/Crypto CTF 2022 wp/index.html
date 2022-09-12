@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canzik&#39;s Blog || Crypto CTF 2022 wp</title>
+    <meta name="author" content="Canzik">
+    <meta name="description" content="持之以恒 ">
+    <meta name="keywords" content=" ">
+    <link rel="icon" href="/IMG_20220303_103825.png">
+    <link rel="stylesheet" href="/css/antd.min.css">
+    
+    <link rel="stylesheet" href="/css/maiden-theme.css">
+    
+    <script src="/js/vue.js"></script>
+    <script src="/js/antd.min.js"></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+
+    <div id="loading"
+        style="height: 100vh; width: 100%; position: fixed;display: flex;z-index: 200; justify-content: space-between;">
+        <div id="loadleft" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div id="loadright" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div
+            style="position: fixed; height: 100vh; width: 100%;display: flex;justify-content: center;align-items: center;">
+            <div id="loadcontent"
+                style="width:400px;height:400px;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px#a3ddfb; text-align:center;opacity:1;transition:opacity 0.3s ease-out;">
+                <div>
+                    <h2>LOADING...</h2>
+                    <p>加载过慢请开启缓存(浏览器默认开启)</p>
+                    <div>
+                        <img src="/dancingkitty.gif" alt="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layout">
+        <transition name="into">
+            <div v-show="show_page" style="display: none;">
+                <div id="menu_show">
+                     
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Canzik's Blog</span>
+        </a>
+        
+        <a href="/">
+            <span>
+                <a-icon type="home" theme="filled" />
+            </span>
+            <span>home</span>
+        </a>
+        
+        <a href="/about">
+            <span>
+                <a-icon type="idcard" theme="filled" />
+            </span>
+            <span>about</span>
+        </a>
+        
+        <a href="/archives">
+            <span>
+                <a-icon type="folder" theme="filled" />
+            </span>
+            <span>archives</span>
+        </a>
+        
+        <a href="/categories">
+            <span>
+                <a-icon type="book" theme="filled" />
+            </span>
+            <span>categories</span>
+        </a>
+        
+        <a href="/tags">
+            <span>
+                <a-icon type="tags" theme="filled" />
+            </span>
+            <span>tags</span>
+        </a>
+        
+        <a target="_blank" rel="noopener" href="https://en.korilin.com">
+            <span>
+                <a-icon type="compass" theme="filled" />
+            </span>
+            <span>英文博客</span>
+        </a>
+        
+    </div>
+
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div :class="'title'" @click="menu_show=!menu_show">
+            <span style="margin-right: 10px;">
+                <a-icon type="appstore" theme="filled" />
+            </span>
+            <span>Canzik's Blog</span>
+        </div>
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="home" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="idcard" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="folder" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="book" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="tags" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">tags</div>
+                </div>
+            </a>
+            
+            <a target="_blank" rel="noopener" href="https://en.korilin.com">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="compass" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">英文博客</div>
+                </div>
+            </a>
+            
+        </div>
+        <div class="curtain" v-show="menu_show"></div>
+    </div>
+
+</nav>
+                </div>
+
+                <div id="main">
+                     
+<link rel="stylesheet" href="/css/post-body.css">
+<div class="article">
+    <div>
+        <h1>Crypto CTF 2022 wp </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <a-icon type="calendar" theme="filled" />
+            </span>
+            2022/7/27
+        </span>
+
+        
+        <span class="category">
+            <a href="/categories/write-up">
+                <span class="icon">
+                    <a-icon type="book" theme="filled" />
+                </span>
+                write up
+            </a>
+        </span>
+        
+
+        
+
+        <span class="tags">
+            <span class="icon">
+                <a-icon type="tags" theme="filled" />
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Crypto-wp" style=color:#00bcd4>
+                    Crypto wp
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+
+    <div class="content" v-pre>
+        <h1 id="Crypto-CTF-2022-wp"><a href="#Crypto-CTF-2022-wp" class="headerlink" title="Crypto CTF 2022 wp"></a>Crypto CTF 2022 wp</h1><p>第一次打CryptoCTF捏，只做出来两道题，还是太菜了罢(悲</p>
+<span id="more"></span>
+<h2 id="Poly-RSA"><a href="#Poly-RSA" class="headerlink" title="Poly RSA"></a>Poly RSA</h2><p><strong>题目</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">from flag import flag</span><br><span class="line"></span><br><span class="line">def keygen(nbit = 64):</span><br><span class="line">   while True:</span><br><span class="line">      k = getRandomNBitInteger(nbit)</span><br><span class="line">      p = k**6 + 7*k**4 - 40*k**3 + 12*k**2 - 114*k + 31377</span><br><span class="line">      q = k**5 - 8*k**4 + 19*k**3 - 313*k**2 - 14*k + 14011</span><br><span class="line">      if isPrime(p) and isPrime(q):</span><br><span class="line">         return p, q</span><br><span class="line"></span><br><span class="line">def encrypt(msg, n, e = 31337):</span><br><span class="line">   m = bytes_to_long(msg)</span><br><span class="line">   return pow(m, e, n)</span><br><span class="line"></span><br><span class="line">p, q = keygen()</span><br><span class="line">n = p * q</span><br><span class="line">enc = encrypt(flag, n)</span><br><span class="line">print(f&#x27;n = &#123;n&#125;&#x27;)</span><br><span class="line">print(f&#x27;enc = &#123;enc&#125;&#x27;)</span><br></pre></td></tr></table></figure>
+<p>附件里的ouput给了n和c</p>
+<p>仔细观察p，q的生成方式，发现它们都是由一个未知数k构造而成，因此对n=p*q这个式子化简，再解出k即可得到p，q</p>
+<p>通过在线网站化简，$n=p*q=k^{11}-8k^{10}+26k^9-409k^8+451k^7+10850k^6+44939k^5-158301k^4+71237k^3-9651273k^2-2036532k+439623147$</p>
+<p><strong>exp</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">e = 31337</span><br><span class="line">n = 44538727182858207226040251762322467288176239968967952269350336889655421753182750730773886813281253762528207970314694060562016861614492626112150259048393048617529867598499261392152098087985858905944606287003243</span><br><span class="line">c = 37578889436345667053409195986387874079577521081198523844555524501835825138236698001996990844798291201187483119265306641889824719989940722147655181198458261772053545832559971159703922610578530282146835945192532</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">n=44538727182858207226040251762322467288176239968967952269350336889655421753182750730773886813281253762528207970314694060562016861614492626112150259048393048617529867598499261392152098087985858905944606287003243</span><br><span class="line">k=var(&#x27;k&#x27;)</span><br><span class="line">solve([k^11-8*k^10+26*k^9-409*k^8+451*k^7+10850*k^6+44939*k^5-158301*k^4+71237*k^3-9651273*k^2-2036532*k+439623147==n],k)</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">#k^&#123;11&#125;-8k^&#123;10&#125;+26k^9-409k^8+451k^7+10850k^6+44939k^5-158301k^4+71237k^3-9651273k^2-2036532k+439623147</span><br><span class="line">k = 9291098683758154336</span><br><span class="line">p = k ** 6 + 7 * k ** 4 - 40 * k ** 3 + 12 * k ** 2 - 114 * k + 31377</span><br><span class="line">q = k ** 5 - 8 * k ** 4 + 19 * k ** 3 - 313 * k ** 2 - 14 * k + 14011</span><br><span class="line">phi = (p-1)*(q-1)</span><br><span class="line">d = inverse(e,phi)</span><br><span class="line">m = pow(c,d,n)</span><br><span class="line">print(long_to_bytes(m))</span><br></pre></td></tr></table></figure>
+<h2 id="baphomet"><a href="#baphomet" class="headerlink" title="baphomet"></a>baphomet</h2><p><strong>题目</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">from base64 import b64encode</span><br><span class="line">from flag import flag</span><br><span class="line"></span><br><span class="line">def encrypt(msg):</span><br><span class="line">   ba = b64encode(msg.encode(&#x27;utf-8&#x27;))</span><br><span class="line">   baph, key = &#x27;&#x27;, &#x27;&#x27;</span><br><span class="line"></span><br><span class="line">   for b in ba.decode(&#x27;utf-8&#x27;):</span><br><span class="line">      if b.islower():</span><br><span class="line">         baph += b.upper()</span><br><span class="line">         key += &#x27;0&#x27;</span><br><span class="line">      else:</span><br><span class="line">         baph += b.lower()</span><br><span class="line">         key += &#x27;1&#x27;</span><br><span class="line"></span><br><span class="line">   baph = baph.encode(&#x27;utf-8&#x27;)</span><br><span class="line">   key = int(key, 2).to_bytes(len(key) // 8, &#x27;big&#x27;)</span><br><span class="line"></span><br><span class="line">   enc = b&#x27;&#x27;</span><br><span class="line">   for i in range(len(baph)):</span><br><span class="line">      enc += (baph[i] ^ key[i % len(key)]).to_bytes(1, &#x27;big&#x27;)</span><br><span class="line"></span><br><span class="line">   return enc</span><br><span class="line"></span><br><span class="line">enc = encrypt(flag)</span><br><span class="line">f = open(&#x27;flag.enc&#x27;, &#x27;wb&#x27;)</span><br><span class="line">f.write(enc)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+<p>这道题挺有意思，它加密的过程非常简单，base64后反转大小写再异或得到密文。但难点在于用来异或的key没有告诉你。</p>
+<p>我感觉我的解法有点非预期。flag的前5个字符肯定是<code>CCTF&#123;</code>，于是我将这一串字符base64后进行大小写转换。这样就得到了baph的一部分。</p>
+<p>enc的长度是48bytes，所以key也位48位，但key在加密时被转换成了bytes，所以只有6位。因此加密过程中所使用的key都是6次一个循环，我们只需要取baph的前六位，根据异或关系便可以得到key</p>
+<p><strong>exp</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">from base64 import *</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">with open(r&quot;flag.enc&quot;, &quot;rb&quot;) as f:</span><br><span class="line">    data = f.read()   #48个byte</span><br><span class="line">    print(data)</span><br><span class="line">#data=b&#x27;\x88R\xc3\xd9&lt;\xb1\xad\x14\xee\xca/\xa5\xba.\x95\xfb;\xb3\xc01\xd9\x9f\n\x99\x8c.\x95\xf4 \xce\xa9$\xe9\xc9\t\xa5\x81S\xcf\xf5#\x98\x93\x0f\xc0\x9c\x7f\xc6&#x27;</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">c = b&#x27;\x88R\xc3\xd9&lt;\xb1\xad\x14\xee\xca/\xa5\xba.\x95\xfb;\xb3\xc01\xd9\x9f\n\x99\x8c.\x95\xf4 \xce\xa9$\xe9\xc9\t\xa5\x81S\xcf\xf5#\x98\x93\x0f\xc0\x9c\x7f\xc6&#x27;</span><br><span class="line">key = &#x27;111110010110001010101101101011000100111011111111&#x27;</span><br><span class="line">key = int(key, 2).to_bytes(len(key) // 8, &#x27;big&#x27;)</span><br><span class="line">print(key)</span><br><span class="line">baph = b&#x27;&#x27;</span><br><span class="line">for i in range(len(c)):</span><br><span class="line">    print(key)</span><br><span class="line">    baph+=(c[i] ^ key[i%len(key)]).to_bytes(1, &#x27;big&#x27;)</span><br><span class="line">m = &#x27;&#x27;</span><br><span class="line">for b in baph.decode(&#x27;utf-8&#x27;):</span><br><span class="line">    if b.islower():</span><br><span class="line">        m += b.upper()</span><br><span class="line">    else:</span><br><span class="line">        m += b.lower()</span><br><span class="line">flag = b64decode(m.encode(&#x27;utf-8&#x27;))</span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <div id="comment">
+        <div id="gitalk-container">
+        </div>
+    </div>
+    
+</div>
+                     
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2022 - 2022 Canzik&#39;s Blog
+            <span class="footer-icon">
+                <a-icon type="flag" theme="filled" /></span>
+            @Canzik
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/korilin/hexo-theme-particle">Particle Theme</a></div>
+        
+    </div>
+
+</footer>
+
+<script src="/js/highlight.min.js"></script>
+<script src="/js/particle.js"></script>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+    new Vue({
+        el: "#layout",
+        data: {
+            show_page: false,
+            onload_menu: false,
+            menu_show: false,
+            card_top: 100
+        },
+        created: function () {
+            var that = this
+            window.onload = function () {
+                that.show_page = true
+                document.getElementById("loadcontent").style.opacity = 0
+                setTimeout(function () {
+                    document.getElementById("loadleft").style.width = 0
+                    document.getElementById("loadright").style.width = 0
+                }, 300)
+                setTimeout(function () {
+                    document.getElementById("loading").style = "display:none"
+                }, 600)
+            }
+        },
+        mounted: function () {
+            var that = this
+            window.addEventListener('scroll', function (e) {
+                that.menu_show = false
+            })
+        },
+        methods: {
+            home_click: function () {
+                window.scrollTo({
+                    top: window.innerHeight - 80,
+                    behavior: "smooth",
+                });
+            }
+        }
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: 'hexo-theme-particle',      // The repository of store comments,
+        owner: 'korilin',
+        admin: ['korilin'],
+        language: 'en',
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: true  // Facebook-like distraction free mode
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</body>
+
+</html>

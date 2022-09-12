@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canzik&#39;s Blog || 关于LFSR的原理以及攻击方式</title>
+    <meta name="author" content="Canzik">
+    <meta name="description" content="持之以恒 ">
+    <meta name="keywords" content=" ">
+    <link rel="icon" href="/IMG_20220303_103825.png">
+    <link rel="stylesheet" href="/css/antd.min.css">
+    
+    <link rel="stylesheet" href="/css/maiden-theme.css">
+    
+    <script src="/js/vue.js"></script>
+    <script src="/js/antd.min.js"></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+
+    <div id="loading"
+        style="height: 100vh; width: 100%; position: fixed;display: flex;z-index: 200; justify-content: space-between;">
+        <div id="loadleft" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div id="loadright" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div
+            style="position: fixed; height: 100vh; width: 100%;display: flex;justify-content: center;align-items: center;">
+            <div id="loadcontent"
+                style="width:400px;height:400px;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px#a3ddfb; text-align:center;opacity:1;transition:opacity 0.3s ease-out;">
+                <div>
+                    <h2>LOADING...</h2>
+                    <p>加载过慢请开启缓存(浏览器默认开启)</p>
+                    <div>
+                        <img src="/dancingkitty.gif" alt="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layout">
+        <transition name="into">
+            <div v-show="show_page" style="display: none;">
+                <div id="menu_show">
+                     
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Canzik's Blog</span>
+        </a>
+        
+        <a href="/">
+            <span>
+                <a-icon type="home" theme="filled" />
+            </span>
+            <span>home</span>
+        </a>
+        
+        <a href="/about">
+            <span>
+                <a-icon type="idcard" theme="filled" />
+            </span>
+            <span>about</span>
+        </a>
+        
+        <a href="/archives">
+            <span>
+                <a-icon type="folder" theme="filled" />
+            </span>
+            <span>archives</span>
+        </a>
+        
+        <a href="/categories">
+            <span>
+                <a-icon type="book" theme="filled" />
+            </span>
+            <span>categories</span>
+        </a>
+        
+        <a href="/tags">
+            <span>
+                <a-icon type="tags" theme="filled" />
+            </span>
+            <span>tags</span>
+        </a>
+        
+        <a target="_blank" rel="noopener" href="https://en.korilin.com">
+            <span>
+                <a-icon type="compass" theme="filled" />
+            </span>
+            <span>英文博客</span>
+        </a>
+        
+    </div>
+
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div :class="'title'" @click="menu_show=!menu_show">
+            <span style="margin-right: 10px;">
+                <a-icon type="appstore" theme="filled" />
+            </span>
+            <span>Canzik's Blog</span>
+        </div>
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="home" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="idcard" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="folder" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="book" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="tags" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">tags</div>
+                </div>
+            </a>
+            
+            <a target="_blank" rel="noopener" href="https://en.korilin.com">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="compass" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">英文博客</div>
+                </div>
+            </a>
+            
+        </div>
+        <div class="curtain" v-show="menu_show"></div>
+    </div>
+
+</nav>
+                </div>
+
+                <div id="main">
+                     
+<link rel="stylesheet" href="/css/post-body.css">
+<div class="article">
+    <div>
+        <h1>关于LFSR的原理以及攻击方式 </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <a-icon type="calendar" theme="filled" />
+            </span>
+            2022/3/9
+        </span>
+
+        
+        <span class="category">
+            <a href="/categories/密码学笔记">
+                <span class="icon">
+                    <a-icon type="book" theme="filled" />
+                </span>
+                密码学笔记
+            </a>
+        </span>
+        
+
+        
+
+        <span class="tags">
+            <span class="icon">
+                <a-icon type="tags" theme="filled" />
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Crypto-note" style=color:#ff7d73>
+                    Crypto note
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+
+    <div class="content" v-pre>
+        <h1 id="线性反馈位移寄存器-LFSR"><a href="#线性反馈位移寄存器-LFSR" class="headerlink" title="线性反馈位移寄存器(LFSR)"></a>线性反馈位移寄存器(LFSR)</h1><p>学习了一下LFSR</p>
+<span id="more"></span>
+<p>一个LFSR由若干时钟存储元件（触发器）和一个反馈路径组成。存储元件的数目即为LFSR的度，即一个拥有m个存储元件的LFSR可称为“度为m”。反馈网络计算位移寄存器中某些触发器的XOR和，并将其作为上一个触发器的输入。</p>
+<p>举个简单的LFSR例子：</p>
+<p><img src="https://s2.loli.net/2022/03/09/g9uUFiw1pb2xDZA.png" alt="img"></p>
+<p>图为拥有三个触发器FF<sub>0</sub>,FF<sub>1,FF<sub>2</sub>的LFSR，即此LFSR的度为3，反馈路径如图所示，内部状态用s<sub>i</sub>表示。在每个时钟滴答内，内部状态会向右移动一位。最右边为LFSR的输出位，最左边位输入位。输入位的状态是在反馈路径中计算的，它是前面时钟周期中一些触发器的XOR和。</p>
+<p>假设初始状态s<sub>0</sub>=0、s<sub>1</sub>=0、s<sub>2</sub>=1，则计算可得此LFSR产生的序列为0100111，周期长度为7</p>
+<p>据此可写出计算LFSR输出位的公式：</p>
+<p>假设初始状态位s<sub>0</sub>、s<sub>1</sub>、s<sub>2</sub>，可得</p>
+<p><img src="https://s2.loli.net/2022/03/09/9bzgylwjH6Qfqc7.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s3 \equiv s_1+s_0\ mod\ 2\\
+s4 \equiv s_2+s_1\ mod\ 2\\
+s5 \equiv s_3+s_2\ mod\ 2\\
+...\\
+s_{i+3} \equiv\ s_{i+1}+s_i\ mod\ 2</script><p>其中i=0,1,2…</p>
+<p>这个例子非常简单，但阐明了LFSR的原理，接下来看看通用的LFSR</p>
+<h2 id="1-LFSR的数学描述"><a href="#1-LFSR的数学描述" class="headerlink" title="1.LFSR的数学描述"></a><strong>1.LFSR的数学描述</strong></h2><p><img src="https://s2.loli.net/2022/03/09/ghToyJekLKw5zUE.png" alt="img"></p>
+<p>这张展示了一个度为m的LFSR，这个LFSR拥有m个可能的反馈位置，触发器与反馈位置通过XOR连接。之所以将反馈位置称为“可能”，是因为每条反馈路径的活跃与否取决于p<sub>0</sub>,p<sub>1</sub>,p<sub>2</sub>,…,p<sub>m-1</sub>：</p>
+<ul>
+<li>如果p<sub>i</sub>=1(关闭开关)，此反馈是活跃的</li>
+<li>如果P<sub>i</sub>=0(打开开关)，对应触发器的输出将不会反馈</li>
+</ul>
+<p>于是可以将一个触发器的输出通过输出值与对应系数的乘积来表示，即p<sub>i</sub>*s<sub>i</sub></p>
+<p>假设某个LFSR的初始加载值为s<sub>0</sub>,s<sub>1</sub>,s<sub>2</sub>,…,s<sub>m-1</sub>,则下一个输出位可通过触发器输出值与对应系数的乘积的XOR和表示：</p>
+<p><img src="https://s2.loli.net/2022/03/09/Fkr5sbJmA7TojB4.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_m \equiv s_0p_0+s_1p_1+...+s_{m-1}p_{m-1}\ mod\ 2</script><p>下一个为</p>
+<p><img src="https://s2.loli.net/2022/03/09/mYX4UGcaCsDwiJe.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_{m+1} \equiv s_0p_0+s_1p_1+...+s_mp_m\ mod\ 2</script><p>归纳一下，输出序列可描述为：</p>
+<p><img src="https://s2.loli.net/2022/03/09/27STZfGUgCwXlNz.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_{i+m} \equiv \sum_{j=0}^{m-1}p_j*s_{i+j}\ mod\ 2;\ s_i,p_j\in \{0,1\};\ i=0,1,2 ...</script><p>此处提出一定理：<strong>度为m的LFSR可以产生的最大序列长度为2<sup>m</sup>-1</strong></p>
+<h2 id="2-关于LFSR的其它属性"><a href="#2-关于LFSR的其它属性" class="headerlink" title="2.关于LFSR的其它属性"></a><strong>2.关于LFSR的其它属性</strong></h2><p>LFSR通常用以下多项式来指定：反馈系数向量为(p<sub>m-1</sub>,p<sub>m-2</sub>,p<sub>m-3</sub>,…,p<sub>0</sub>)的LFSR可以表示为以下多项式：</p>
+<p><img src="https://s2.loli.net/2022/03/09/XzCPeYtFLWhwgHS.png" alt="img"></p>
+<script type="math/tex; mode=display">
+P(x)=x^m+p_{m-1}x^{m-1}+...+p_1x+p_0</script><p>例如，系数为(p<sub>3</sub>=0,p<sub>2</sub>=0,p<sub>1</sub>=1,p<sub>0</sub>=0)d的LFSR可以表示为多项式：x<sup>4</sup>+x+1</p>
+<p>当LFSR拥有最大长度（即周期）时，对应的的反馈系数向量多项式被称为本原多项式。对于一个给定的度m而言，可能存在多个本原多项式</p>
+<h2 id="3-针对单个LFSR的攻击"><a href="#3-针对单个LFSR的攻击" class="headerlink" title="3.针对单个LFSR的攻击"></a><strong>3.针对单个LFSR的攻击</strong></h2><p>谈完了LFSR的原理，现在来说一下针对LFSR的攻击方式</p>
+<p>假设攻击者Oscar知道部分明文和对应的密文，他就可以发起攻击。假设Oscar知道明文x<sub>0</sub>,x<sub>1</sub>,…,x<sub>2m-1</sub>，它们对应的密文为y<sub>0</sub>,y<sub>1</sub>,…y<sub>2m-1</sub>。Oscar利用这2m对明文和密文位，就可以重构开头的2m个密钥序列</p>
+<p><img src="https://s2.loli.net/2022/03/09/FPi6ltMHrSbgo5O.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_i\equiv x_i+y_i\ mod\ 2;\ \ \ i=0,1,2,..,2m-1</script><p>接下来就是计算出反馈系数向量p<sub>i</sub>。根据输出序列的公式，可以得到如下式子</p>
+<p><img src="https://s2.loli.net/2022/03/09/OSmnuK8cxehBQaF.png" alt="img"></p>
+<script type="math/tex; mode=display">
+i=0,\ s_m\equiv p_{m-1}s_{m-1}+...+p_1s_1+p_0s_0\ mod\ 2\\
+i=1,\ s_{m+1}\equiv p_{m-1}s_m+...+p_1s_2+p_0s_1\ mod\ 2\\
+...\\
+i=m-1,\ s_{2m-1}\equiv p_{m-1}s_{2m-2}+...p_1s_m+p_0s_{m-1}\ mod\ 2\\</script><p>上述等式中每一个都是线性无关的，故现在有了含m个未知数P<sub>m-1</sub>,…,p<sub>1</sub>,p<sub>0</sub>的m个线性等式。利用高斯消去或矩阵求逆等求解方程便可以构造出反馈系数向量，并以此计算任意m个输出位，得到整个输出序列。正因为这种强大的攻击方式，不少序列密码都是使用多个LFSR组合的方式构建强壮的密码体制，Trivium就是一个很好的例子</p>
+<p><img src="https://s2.loli.net/2022/03/09/V5DoX3ePglpJUYh.png" alt="img"></p>
+<blockquote>
+<p>注：插图来自《深入浅出密码学》</p>
+</blockquote>
+
+    </div>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <div id="comment">
+        <div id="gitalk-container">
+        </div>
+    </div>
+    
+</div>
+                     
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2022 - 2022 Canzik&#39;s Blog
+            <span class="footer-icon">
+                <a-icon type="flag" theme="filled" /></span>
+            @Canzik
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/korilin/hexo-theme-particle">Particle Theme</a></div>
+        
+    </div>
+
+</footer>
+
+<script src="/js/highlight.min.js"></script>
+<script src="/js/particle.js"></script>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+    new Vue({
+        el: "#layout",
+        data: {
+            show_page: false,
+            onload_menu: false,
+            menu_show: false,
+            card_top: 100
+        },
+        created: function () {
+            var that = this
+            window.onload = function () {
+                that.show_page = true
+                document.getElementById("loadcontent").style.opacity = 0
+                setTimeout(function () {
+                    document.getElementById("loadleft").style.width = 0
+                    document.getElementById("loadright").style.width = 0
+                }, 300)
+                setTimeout(function () {
+                    document.getElementById("loading").style = "display:none"
+                }, 600)
+            }
+        },
+        mounted: function () {
+            var that = this
+            window.addEventListener('scroll', function (e) {
+                that.menu_show = false
+            })
+        },
+        methods: {
+            home_click: function () {
+                window.scrollTo({
+                    top: window.innerHeight - 80,
+                    behavior: "smooth",
+                });
+            }
+        }
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: 'hexo-theme-particle',      // The repository of store comments,
+        owner: 'korilin',
+        admin: ['korilin'],
+        language: 'en',
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: true  // Facebook-like distraction free mode
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</body>
+
+</html>
