@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canzik&#39;s Blog || 关于LFSR的原理以及攻击方式</title>
+    <title>Canzik&#39;s Blog || 蓝帽杯2022 crypto复现</title>
     <meta name="author" content="Canzik">
     <meta name="description" content="持之以恒 ">
     <meta name="keywords" content=" ">
@@ -169,23 +169,23 @@
 <link rel="stylesheet" href="/css/post-body.css">
 <div class="article">
     <div>
-        <h1>关于LFSR的原理以及攻击方式 </h1>
+        <h1>蓝帽杯2022 crypto复现 </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <a-icon type="calendar" theme="filled" />
             </span>
-            2022/3/9
+            2022/9/23
         </span>
 
         
         <span class="category">
-            <a href="/categories/密码学笔记">
+            <a href="/categories/write-up">
                 <span class="icon">
                     <a-icon type="book" theme="filled" />
                 </span>
-                密码学笔记
+                write up
             </a>
         </span>
         
@@ -199,8 +199,8 @@
             
             <span class="tag">
                 
-                <a href="/tags/Crypto-note" style=color:#1bccbc>
-                    Crypto note
+                <a href="/tags/Crypto-wp" style=color:#ff7d73>
+                    Crypto wp
                 </a>
             </span>
             
@@ -209,60 +209,27 @@
     </div>
 
     <div class="content" v-pre>
-        <h1 id="线性反馈位移寄存器-LFSR"><a href="#线性反馈位移寄存器-LFSR" class="headerlink" title="线性反馈位移寄存器(LFSR)"></a>线性反馈位移寄存器(LFSR)</h1><p>学习了一下LFSR</p>
-<span id="more"></span>
-<p>一个LFSR由若干时钟存储元件（触发器）和一个反馈路径组成。存储元件的数目即为LFSR的度，即一个拥有m个存储元件的LFSR可称为“度为m”。反馈网络计算位移寄存器中某些触发器的XOR和，并将其作为上一个触发器的输入。</p>
-<p>举个简单的LFSR例子：</p>
-<p><img src="https://s2.loli.net/2022/03/09/g9uUFiw1pb2xDZA.png" alt="img"></p>
-<p>图为拥有三个触发器FF<sub>0</sub>,FF<sub>1,FF<sub>2</sub>的LFSR，即此LFSR的度为3，反馈路径如图所示，内部状态用s<sub>i</sub>表示。在每个时钟滴答内，内部状态会向右移动一位。最右边为LFSR的输出位，最左边位输入位。输入位的状态是在反馈路径中计算的，它是前面时钟周期中一些触发器的XOR和。</p>
-<p>假设初始状态s<sub>0</sub>=0、s<sub>1</sub>=0、s<sub>2</sub>=1，则计算可得此LFSR产生的序列为0100111，周期长度为7</p>
-<p>据此可写出计算LFSR输出位的公式：</p>
-<p>假设初始状态位s<sub>0</sub>、s<sub>1</sub>、s<sub>2</sub>，可得</p>
-<p><img src="https://s2.loli.net/2022/03/09/9bzgylwjH6Qfqc7.png" alt="img"></p>
+        <h1 id="蓝帽杯-2022-Crypto题目复现"><a href="#蓝帽杯-2022-Crypto题目复现" class="headerlink" title="蓝帽杯 2022 Crypto题目复现"></a>蓝帽杯 2022 Crypto题目复现</h1><h2 id="corrupted-key"><a href="#corrupted-key" class="headerlink" title="corrupted_key"></a>corrupted_key</h2><p>上来拿到题目先看题目名字：损坏的密钥。告诉我们要修复附件中的pem文件</p>
+<p>由于pem文件缺失部分数据，无法用openssl进行读取，只能解析内容提取数据（参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/461349946">(PKCS1) RSA 公私钥 pem 文件解析 - 知乎 (zhihu.com)</a>）</p>
+<p>我们可以提取到四组数据：</p>
+<p><code>n=0xd7152506aa9cec05e5335d6b46f5491407c3199fd51091f1f6030d3762b9e03f49c9dcdc075054e0cc148b974b41854bd93b4ee16a2a876ee62005e80ef806b7aa3b64b1bf9b1fa773e353d0cdb9ff9783ddd5f5e67499ad10f361e938d00b82a6a4c42a0535c5e76721798e86b45cd4b8d03b0d7e75c2be8766a1e843bdc641</code></p>
+<p><code>e=0x10001</code></p>
+<p><code>part_dq=0xc90bcecf1cbab3358585e8a041d1b1</code></p>
+<p><code>inv_q=0xe3016cb3609c1d643c167439c3b938b881f4237f24860d3b1cb85a626d5ccd4726964e0f8270d6c4df9ebfebcc538e4ee5e1a7b7368ede51ec6ae917f78eb598</code></p>
+<p>由于知道部分dq，所以这题才考察dq泄露的攻击方式。但是dq缺失了一部分，很容易想到利用一元的coppersmith来解决这个问题</p>
+<p>很显然$e*dq=k(q-1)+1$这个式子存在两个未知数，无法使用coppersmith，使所以这里把inv_q利用起来</p>
+<p>因为</p>
 <script type="math/tex; mode=display">
-s3 \equiv s_1+s_0\ mod\ 2\\
-s4 \equiv s_2+s_1\ mod\ 2\\
-s5 \equiv s_3+s_2\ mod\ 2\\
-...\\
-s_{i+3} \equiv\ s_{i+1}+s_i\ mod\ 2</script><p>其中i=0,1,2…</p>
-<p>这个例子非常简单，但阐明了LFSR的原理，接下来看看通用的LFSR</p>
-<h2 id="1-LFSR的数学描述"><a href="#1-LFSR的数学描述" class="headerlink" title="1.LFSR的数学描述"></a><strong>1.LFSR的数学描述</strong></h2><p><img src="https://s2.loli.net/2022/03/09/ghToyJekLKw5zUE.png" alt="img"></p>
-<p>这张展示了一个度为m的LFSR，这个LFSR拥有m个可能的反馈位置，触发器与反馈位置通过XOR连接。之所以将反馈位置称为“可能”，是因为每条反馈路径的活跃与否取决于p<sub>0</sub>,p<sub>1</sub>,p<sub>2</sub>,…,p<sub>m-1</sub>：</p>
-<ul>
-<li>如果p<sub>i</sub>=1(关闭开关)，此反馈是活跃的</li>
-<li>如果P<sub>i</sub>=0(打开开关)，对应触发器的输出将不会反馈</li>
-</ul>
-<p>于是可以将一个触发器的输出通过输出值与对应系数的乘积来表示，即p<sub>i</sub>*s<sub>i</sub></p>
-<p>假设某个LFSR的初始加载值为s<sub>0</sub>,s<sub>1</sub>,s<sub>2</sub>,…,s<sub>m-1</sub>,则下一个输出位可通过触发器输出值与对应系数的乘积的XOR和表示：</p>
-<p><img src="https://s2.loli.net/2022/03/09/Fkr5sbJmA7TojB4.png" alt="img"></p>
+inv\_q*q \equiv 1\ mod\ p</script><p>所以</p>
 <script type="math/tex; mode=display">
-s_m \equiv s_0p_0+s_1p_1+...+s_{m-1}p_{m-1}\ mod\ 2</script><p>下一个为</p>
-<p><img src="https://s2.loli.net/2022/03/09/mYX4UGcaCsDwiJe.png" alt="img"></p>
+inv\_q*q=k*p+1</script><p>两边同时乘上q，可得</p>
 <script type="math/tex; mode=display">
-s_{m+1} \equiv s_0p_0+s_1p_1+...+s_mp_m\ mod\ 2</script><p>归纳一下，输出序列可描述为：</p>
-<p><img src="https://s2.loli.net/2022/03/09/27STZfGUgCwXlNz.png" alt="img"></p>
+inv\_q*q^2-q \equiv 0\ mod\ n</script><p>将$e*dq=k(q-1)+1$与上式联立，可得</p>
 <script type="math/tex; mode=display">
-s_{i+m} \equiv \sum_{j=0}^{m-1}p_j*s_{i+j}\ mod\ 2;\ s_i,p_j\in \{0,1\};\ i=0,1,2 ...</script><p>此处提出一定理：<strong>度为m的LFSR可以产生的最大序列长度为2<sup>m</sup>-1</strong></p>
-<h2 id="2-关于LFSR的其它属性"><a href="#2-关于LFSR的其它属性" class="headerlink" title="2.关于LFSR的其它属性"></a><strong>2.关于LFSR的其它属性</strong></h2><p>LFSR通常用以下多项式来指定：反馈系数向量为(p<sub>m-1</sub>,p<sub>m-2</sub>,p<sub>m-3</sub>,…,p<sub>0</sub>)的LFSR可以表示为以下多项式：</p>
-<p><img src="https://s2.loli.net/2022/03/09/XzCPeYtFLWhwgHS.png" alt="img"></p>
-<script type="math/tex; mode=display">
-P(x)=x^m+p_{m-1}x^{m-1}+...+p_1x+p_0</script><p>例如，系数为(p<sub>3</sub>=0,p<sub>2</sub>=0,p<sub>1</sub>=1,p<sub>0</sub>=0)d的LFSR可以表示为多项式：x<sup>4</sup>+x+1</p>
-<p>当LFSR拥有最大长度（即周期）时，对应的的反馈系数向量多项式被称为本原多项式。对于一个给定的度m而言，可能存在多个本原多项式</p>
-<h2 id="3-针对单个LFSR的攻击"><a href="#3-针对单个LFSR的攻击" class="headerlink" title="3.针对单个LFSR的攻击"></a><strong>3.针对单个LFSR的攻击</strong></h2><p>谈完了LFSR的原理，现在来说一下针对LFSR的攻击方式</p>
-<p>假设攻击者Oscar知道部分明文和对应的密文，他就可以发起攻击。假设Oscar知道明文x<sub>0</sub>,x<sub>1</sub>,…,x<sub>2m-1</sub>，它们对应的密文为y<sub>0</sub>,y<sub>1</sub>,…y<sub>2m-1</sub>。Oscar利用这2m对明文和密文位，就可以重构开头的2m个密钥序列</p>
-<p><img src="https://s2.loli.net/2022/03/09/FPi6ltMHrSbgo5O.png" alt="img"></p>
-<script type="math/tex; mode=display">
-s_i\equiv x_i+y_i\ mod\ 2;\ \ \ i=0,1,2,..,2m-1</script><p>接下来就是计算出反馈系数向量p<sub>i</sub>。根据输出序列的公式，可以得到如下式子</p>
-<p><img src="https://s2.loli.net/2022/03/09/OSmnuK8cxehBQaF.png" alt="img"></p>
-<script type="math/tex; mode=display">
-i=0,\ s_m\equiv p_{m-1}s_{m-1}+...+p_1s_1+p_0s_0\ mod\ 2\\
-i=1,\ s_{m+1}\equiv p_{m-1}s_m+...+p_1s_2+p_0s_1\ mod\ 2\\
-...\\
-i=m-1,\ s_{2m-1}\equiv p_{m-1}s_{2m-2}+...p_1s_m+p_0s_{m-1}\ mod\ 2\\</script><p>上述等式中每一个都是线性无关的，故现在有了含m个未知数P<sub>m-1</sub>,…,p<sub>1</sub>,p<sub>0</sub>的m个线性等式。利用高斯消去或矩阵求逆等求解方程便可以构造出反馈系数向量，并以此计算任意m个输出位，得到整个输出序列。正因为这种强大的攻击方式，不少序列密码都是使用多个LFSR组合的方式构建强壮的密码体制，Trivium就是一个很好的例子</p>
-<p><img src="https://s2.loli.net/2022/03/09/V5DoX3ePglpJUYh.png" alt="img"></p>
-<blockquote>
-<p>注：插图来自《深入浅出密码学》</p>
-</blockquote>
+inv\_q(e*dq-1)^2+k(2*inv\_q-1)(e*dq-1)+inv\_q*k^2-k^2 \equiv 0\ mod\ n</script><p>这样就可以使用coppersmith了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">n = 0xd7152506aa9cec05e5335d6b46f5491407c3199fd51091f1f6030d3762b9e03f49c9dcdc075054e0cc148b974b41854bd93b4ee16a2a876ee62005e80ef806b7aa3b64b1bf9b1fa773e353d0cdb9ff9783ddd5f5e67499ad10f361e938d00b82a6a4c42a0535c5e76721798e86b45cd4b8d03b0d7e75c2be8766a1e843bdc641</span><br><span class="line">e = 0x10001</span><br><span class="line">_dq = 0xc90bcecf1cbab3358585e8a041d1b1</span><br><span class="line">inv_q = 0xe3016cb3609c1d643c167439c3b938b881f4237f24860d3b1cb85a626d5ccd4726964e0f8270d6c4df9ebfebcc538e4ee5e1a7b7368ede51ec6ae917f78eb598</span><br><span class="line">PR.&lt;x&gt; = PolynomialRing(Zmod(n))</span><br><span class="line">dq = (2 ** 120 * x) + _dq</span><br><span class="line">for k in range(65537,0,-1):</span><br><span class="line">    f = inv_q * (e * dq - 1) ** 2 + k * (2 * inv_q - 1) * (e * dq - 1) + inv_q * k^2 - k^2</span><br><span class="line">    f = f.monic()</span><br><span class="line">    root = f.small_roots(X=2^392,beta=0.4)</span><br><span class="line">    if len(root) &gt; 0:</span><br><span class="line">        print(int(root[0]) * 2 ** 120 + _dq)</span><br><span class="line">        print(k)</span><br><span class="line">        break</span><br><span class="line">#dq = 11263269100321843418340309033584057768246046953115325020896491943793759194249558697334095131684279304657225064156696057310019203890620314290203835007881649</span><br><span class="line">#k = 59199</span><br></pre></td></tr></table></figure>
+<p>之后代入k算出q，再用常规的RSA解出key，注意在原代码中是用PKCS1_OAEP加密的，所以要用这个算法还原回去</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">from Crypto.PublicKey import RSA</span><br><span class="line">from Crypto.Cipher import PKCS1_OAEP</span><br><span class="line">import gmpy2</span><br><span class="line">with open(&quot;D:\\技术之路\\Crypto\\题目\\蓝帽杯2022\\corrupted_key\\flag.enc&quot;,&quot;rb&quot;)as f:</span><br><span class="line">    c = f.read()</span><br><span class="line">c1 = bytes_to_long(c)</span><br><span class="line">dq = 11263269100321843418340309033584057768246046953115325020896491943793759194249558697334095131684279304657225064156696057310019203890620314290203835007881649</span><br><span class="line">k = 59199</span><br><span class="line">n = 0xd7152506aa9cec05e5335d6b46f5491407c3199fd51091f1f6030d3762b9e03f49c9dcdc075054e0cc148b974b41854bd93b4ee16a2a876ee62005e80ef806b7aa3b64b1bf9b1fa773e353d0cdb9ff9783ddd5f5e67499ad10f361e938d00b82a6a4c42a0535c5e76721798e86b45cd4b8d03b0d7e75c2be8766a1e843bdc641</span><br><span class="line">e = 0x10001</span><br><span class="line">q = int((e * dq - 1) // k + 1)</span><br><span class="line">assert n % q == 0</span><br><span class="line">p = int(n // q)</span><br><span class="line">phi = (p - 1) * (q - 1)</span><br><span class="line">d = int(inverse(e,phi))</span><br><span class="line">key = RSA.construct((n,e,d,p,q))  #把数据变成公钥</span><br><span class="line">flag = PKCS1_OAEP.new(key)</span><br><span class="line">flag = flag.decrypt(c)</span><br><span class="line">print(flag)</span><br><span class="line">#flag = b&#x27;flag&#123;f1bf5c44-e2b4-424f-baff-b38b73a82e72&#125;&#x27;</span><br></pre></td></tr></table></figure>
 
     </div>
 
