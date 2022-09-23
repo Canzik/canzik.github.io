@@ -199,7 +199,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/Crypto-wp" style=color:#879cff>
+                <a href="/tags/Crypto-wp" style=color:#1bccbc>
                     Crypto wp
                 </a>
             </span>
@@ -209,7 +209,9 @@
     </div>
 
     <div class="content" v-pre>
-        <h1 id="蓝帽杯-2022-Crypto题目复现"><a href="#蓝帽杯-2022-Crypto题目复现" class="headerlink" title="蓝帽杯 2022 Crypto题目复现"></a>蓝帽杯 2022 Crypto题目复现</h1><h2 id="corrupted-key"><a href="#corrupted-key" class="headerlink" title="corrupted_key"></a>corrupted_key</h2><p>上来拿到题目先看题目名字：损坏的密钥。告诉我们要修复附件中的pem文件</p>
+        <h1 id="蓝帽杯-2022-Crypto题目复现"><a href="#蓝帽杯-2022-Crypto题目复现" class="headerlink" title="蓝帽杯 2022 Crypto题目复现"></a>蓝帽杯 2022 Crypto题目复现</h1><p>pem文件解析</p>
+<span id="more"></span>
+<h2 id="corrupted-key"><a href="#corrupted-key" class="headerlink" title="corrupted_key"></a>corrupted_key</h2><p>上来拿到题目先看题目名字：损坏的密钥。告诉我们要修复附件中的pem文件</p>
 <p>由于pem文件缺失部分数据，无法用openssl进行读取，只能解析内容提取数据（参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/461349946">(PKCS1) RSA 公私钥 pem 文件解析 - 知乎 (zhihu.com)</a>）</p>
 <p>我们可以提取到四组数据：</p>
 <p><code>n=0xd7152506aa9cec05e5335d6b46f5491407c3199fd51091f1f6030d3762b9e03f49c9dcdc075054e0cc148b974b41854bd93b4ee16a2a876ee62005e80ef806b7aa3b64b1bf9b1fa773e353d0cdb9ff9783ddd5f5e67499ad10f361e938d00b82a6a4c42a0535c5e76721798e86b45cd4b8d03b0d7e75c2be8766a1e843bdc641</code></p>
