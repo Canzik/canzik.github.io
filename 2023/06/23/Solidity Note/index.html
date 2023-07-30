@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Canzik" />
+  <meta name="description" content="世界上只有一种真正的英雄主义，那就是在认清生活的真相后依然热爱生活。" />
+  
+  
+  <title>
+    
+      Solidity Note 
+      
+      
+    
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto:400,400italic,600|Roboto+Mono" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+
+
+  
+
+  
+    
+<link rel="stylesheet" href="/css/post.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <a href="/">Canzik</a>
+</div>
+
+
+      <p class="links">
+  
+    <a title="archives" target="" href="/archives/">
+      <i class="iconfont icon-bookmark"></i>
+    </a>
+  
+    <a title="github" target="_blank" href="https://github.com/Canzik">
+      <i class="iconfont icon-github"></i>
+    </a>
+  
+    <a title="email" target="" href="canzikkai@gmail.com">
+      <i class="iconfont icon-envelope"></i>
+    </a>
+  
+    <a title="rss" target="_blank" href="/atom.xml">
+      <i class="iconfont icon-rss"></i>
+    </a>
+  
+</p>
+
+
+      <div class="main">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+
+<div class="post">
+  <h3 class="date">
+    Jun 23, 2023
+  </h3>
+  <h1>
+    Solidity Note
+  </h1>
+  <div class="content markdown-body">
+    <h2 id="简单的智能合约"><a href="#简单的智能合约" class="headerlink" title="简单的智能合约"></a>简单的智能合约</h2><p>Solidity中智能合约的含义就是一组代码（它的 <em>功能</em> )和数据（它的 <em>状态</em>）的集合，并且它们是位于以太坊区块链的一个特定地址上的</p>
+<p><strong>存储合约示例</strong></p>
+<pre><code class="lang-solidity">// SPDX-License-Identifier: GPL-3.0
+pragma solidity &gt;=0.4.16 &lt;0.9.0;  //声明版本范围
+
+contract SimpleStorage &#123;
+    uint storedData;  //uint 256位无符号整数
+
+    function set(uint x) public &#123;
+        storedData = x;   //solidity中不需要用this.访问
+    &#125;
+
+    function get() public view returns (uint) &#123;
+        return storedData;
+    &#125;
+&#125;
+</code></pre>
+<p><code>set</code>：修改变量storeData的值</p>
+<p><code>get</code>：检索变量storeData的值</p>
+<p>这个简单的合约允许任何人在合约中存储一个单独的数字，并且这个数字可以被任何人访问，且没有可行的方法阻止这个数字的发布</p>
+<p><strong><strong>货币合约（Subcurrency）示例</strong></strong></p>
+<pre><code class="lang-solidity">// SPDX-License-Identifier: GPL-3.0pragma solidity ^0.8.4;
+
+contract Coin &#123;
+    // 关键字“public”让这些变量可以从外部读取    
+    address public minter;
+    mapping (address =&gt; uint) public balances;
+
+    // 轻客户端可以通过事件针对变化作出高效的反应    
+    event Sent(address from, address to, uint amount);
+
+    // 这是构造函数，只有当合约创建时运行    
+    constructor() &#123;
+        minter = msg.sender;
+    &#125;
+
+    function mint(address receiver, uint amount) public &#123;
+        require(msg.sender == minter);
+        balances[receiver] += amount;
+    &#125;
+
+   // Errors allow you to provide information about
+   // why an operation failed. They are returned
+   // to the caller of the function.    
+   error InsufficientBalance(uint requested, uint available);
+
+    function send(address receiver, uint amount) public &#123;
+        if (amount &gt; balances[msg.sender])
+            revert InsufficientBalance(&#123;
+                requested: amount,
+                available: balances[msg.sender]
+            &#125;);
+
+        balances[msg.sender] -= amount;
+        balances[receiver] += amount;
+        emit Sent(msg.sender, receiver, amount);
+    &#125;
+&#125;
+</code></pre>
+<p><code>address public minter</code>：</p>
+<p>address是个160位的值，且不允许任何算数操作。关键字<code>public</code>自动生成一个函数，允许在此合约之外访问这个状态变量的当前值。public会由编译器自动生成一段函数，代码大致如下（暂时忽略 external 和 view）：</p>
+<pre><code class="lang-solidity">function minter() external view returns (address) &#123; return minter; &#125;
+</code></pre>
+<p>在使用public后再加上这段代码会造成冲突，会出现同名的一个函数和一个变量</p>
+<p><code>mapping (address =&gt; uint) public balances</code>：</p>
+<p>mapping类型，将address映射为无符号整数（uint）。在使用mapping时，要么记住你添加到mapping中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它。这里由public生成的函数要更加复杂一点，大致如下：</p>
+<pre><code class="lang-solidity">function balances(address account) external view returns (uint) &#123;
+    return balances[account];
+&#125;
+</code></pre>
+<p>可以很轻松的查询账户的余额</p>
+<p><code>event Sent(address from, address to, uint amount)</code>：</p>
+<p>这行声明了一个所谓的“事件（event）”，它会在 <code>send</code> 函数的最后一行被发出。用户界面（当然也包括服务器应用程序）可以监听区块链上正在发送的事件，而不会花费太多成本。一旦它被发出，监听该事件的listener都将收到通知。而所有的事件都包含了 <code>from</code> ， <code>to</code> 和 <code>amount</code> 三个参数，可方便追踪交易。</p>
+<p>为了监听这个事件，你可以使用如下JavaScript代码， Coin 是通过 web3.js 创建的合约对象  :</p>
+<pre><code class="lang-jsx">Coin.Sent().watch(&#123;&#125;, &#39;&#39;,function(error, result) &#123;
+if (!error) &#123;
+        console.log(&quot;Coin transfer: &quot; + result.args.amount +
+            &quot; coins were sent from &quot; + result.args.from +
+            &quot; to &quot; + result.args.to + &quot;.&quot;);
+        console.log(&quot;Balances now:\n&quot; +
+            &quot;Sender: &quot; + Coin.balances.call(result.args.from) +
+            &quot;Receiver: &quot; + Coin.balances.call(result.args.to));
+    &#125;
+&#125;)
+</code></pre>
+<p><del>搞不懂event，菜的扣脚</del></p>
+<p><code>constructor</code>：</p>
+<p>创建合约期间运行的构造函数，不能在创建后调用。此合约中构造函数用来永久存储创建合约的人的地址<code>msg</code>。<code>msg.sender</code>始终记录当前（外部）函数调用是来自于哪一个地址</p>
+<p><code>mint</code>：</p>
+<p>mint函数用来新发行一定的币到一个新地址。<code>require</code>用来检查某些条件，不满足就会回推所有的状态变化。在这个合约中，<code>require(msg.sender == minter)</code>确保只有合约创建者可以调用<code>mint</code>。当<code>balances[receiver] += amount</code>的值大于<code>uint</code>（2**256-1），称为溢出交易，溢出交易将被还原</p>
+<p><code>error</code>：</p>
+<p>描述错误信息，一般和<code>revert</code>一起使用。<code>revert</code>语句无条件地中止执行并回退所有的变化，类似于 <code>require</code>函数，它也同样允许你提供一个错误的名称和额外的数据，这些额外数据将提供给调用者(并最终提供给前端应用程序或区块资源管理器）。error是一个专门用来返回错误，并且可以自定义返回内容的类型</p>
+<p><code>send</code>：</p>
+<p>进行交易的函数。此合约中先判断发送者的账户上是否有足够的余额，余额不足用<code>revert</code>语句中止并回退。余额足够则进行账户的交易。交易结束后，使用<code>emit</code>关键字触发事件</p>
+<p><code>~~emit</code>和<code>evnet</code>都不是很懂~~</p>
+<h2 id="Knowledge-point"><a href="#Knowledge-point" class="headerlink" title="Knowledge point"></a>Knowledge point</h2><p><strong>状态变量、局部变量、全局变量</strong></p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract SolidityTest &#123;
+   uint storedData; // 状态变量
+   constructor() public &#123;
+      storedData = 10;   
+   &#125;
+   function getResult() public view returns(uint)&#123;
+      uint a = 1; // 局部变量
+      uint b = 2;
+      uint result = a + b;
+      return result; // 访问局部变量
+   &#125;
+&#125;
+</code></pre>
+<ul>
+<li>状态变量：变量值永久保存在合约存储空间中的变量</li>
+<li>局部变量：变量值仅在函数执行过程中有效的变量，函数退出后，变量无效</li>
+<li>全局变量：全局工作区中存在的特殊变量，提供有关区块链和交易属性的信息</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>返回</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>blockhash(uint blockNumber) returns (bytes32)</td>
+<td>给定区块的哈希值 – 只适用于256最近区块, 不包含当前区块。</td>
+</tr>
+<tr>
+<td>block.coinbase (address payable)</td>
+<td>当前区块矿工的地址</td>
+</tr>
+<tr>
+<td>block.difficulty (uint)</td>
+<td>当前区块的难度</td>
+</tr>
+<tr>
+<td>block.gaslimit (uint)</td>
+<td>当前区块的gaslimit</td>
+</tr>
+<tr>
+<td>block.number (uint)</td>
+<td>当前区块的number</td>
+</tr>
+<tr>
+<td>block.timestamp (uint)</td>
+<td>当前区块的时间戳，为unix纪元以来的秒</td>
+</tr>
+<tr>
+<td>gasleft() returns (uint256)</td>
+<td>剩余 gas</td>
+</tr>
+<tr>
+<td>msg.data (bytes calldata)</td>
+<td>完成 calldata</td>
+</tr>
+<tr>
+<td>msg.sender (address payable)</td>
+<td>消息发送者 (当前 caller)</td>
+</tr>
+<tr>
+<td>msg.sig (bytes4)</td>
+<td>calldata的前四个字节 (function identifier)</td>
+</tr>
+<tr>
+<td>msg.value (uint)</td>
+<td>当前消息的wei值</td>
+</tr>
+<tr>
+<td>now (uint)</td>
+<td>当前块的时间戳</td>
+</tr>
+<tr>
+<td>tx.gasprice (uint)</td>
+<td>交易的gas价格</td>
+</tr>
+<tr>
+<td>tx.origin (address payable)</td>
+<td>交易的发送方</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>变量作用域</strong></p>
+<ul>
+<li><strong>Public</strong> – 公共状态变量可以在内部访问，也可以通过消息访问。对于公共状态变量，将生成一个自动getter函数。</li>
+<li><strong>Internal</strong> – 内部状态变量只能从当前合约或其派生合约内访问。</li>
+<li><strong>Private</strong> – 私有状态变量只能从当前合约内部访问，派生合约内不能访问。</li>
+</ul>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract C &#123;
+   uint public data = 30;
+   uint internal iData= 10;
+
+   function x() public returns (uint) &#123;
+      data = 3; // 内部访问
+      return data;
+   &#125;
+&#125;
+contract Caller &#123;
+   C c = new C();
+   function f() public view returns (uint) &#123;
+      return c.data(); // 外部访问
+   &#125;
+&#125;
+contract D is C &#123;
+   uint storedData; // 状态变量
+
+   function y() public returns (uint) &#123;
+      iData = 3; // 派生合约内部访问
+      return iData;
+   &#125;
+   function getResult() public view returns(uint)&#123;
+      uint a = 1; // 局部变量
+      uint b = 2;
+      uint result = a + b;
+      return storedData; // 访问状态变量
+   &#125;
+&#125;
+</code></pre>
+<p><strong>条件运算符</strong></p>
+<p><code>?:</code>：如果条件为真？则取值X：否则值Y</p>
+<aside>
+💡 example:`a > b? a: b`
+
+
+</aside>
+
+<p><strong>循环语句</strong></p>
+<p>与c类似</p>
+<p><strong>条件语句</strong></p>
+<p>与c类似</p>
+<p><strong>引用类型/复合数据类型</strong></p>
+<ul>
+<li>数组(字符串与bytes是特殊的数组，所以也是引用类型)</li>
+<li>struct（结构体）</li>
+<li>map（映射）</li>
+</ul>
+<p>这些类型涉及到的数据量较大，复制它们可能要消耗大量Gas，非常昂贵，所以使用它们时，必须考虑存储位置，例如，是保存在内存中，还是在EVM存储区中</p>
+<p><strong>数据位置</strong></p>
+<p><code>Storage（存储）</code>：</p>
+<p>存储永久数据，该数据可以被合约中所有函数访问。可以把它视为硬盘数据，所有数据都永久存储。因其数据存储的持久性，故成本较高</p>
+<p><code>Memory（内存）</code>：</p>
+<p>临时数据，比Storage便宜。它只能在函数中访问，函数执行完毕，它的内容就会被丢弃</p>
+<p><code>Calldata</code>：</p>
+<p>不可修改的非持久性数据位置，所有传递给函数的值，都存储在这里。Calladata也是外部函数的参数的默认位置</p>
+<p><code>Stack（堆栈）</code>：</p>
+<p>EVM维护的非持久性数据，EVM使用堆栈数据位置在执行期间加载变量。最多有1024个级别的限制</p>
+<aside>
+💡 显示标记变量的位置：`数据类型 数据位置 变量名`
+
+
+</aside>
+
+<p><strong>变量数据位置规则</strong></p>
+<ul>
+<li>状态变量：存储在存储区中。此外，不能显式标记状态变量的位置</li>
+<li>函数参数与返回值：存储在内存中</li>
+<li>局部变量：值类型存储在内存中<code>如uint,bool,address</code>，引用类型<code>数组，struct，map</code>需要显式地指定数据位置</li>
+<li>外部函数的参数：存储在Calldata中</li>
+</ul>
+<p><strong>枚举（Enum）</strong></p>
+<p>枚举将一个变量的取值限制为几个预定义值中的一个。精确使用枚举类型有助于减少代码中的bug</p>
+<pre><code class="lang-solidity">//SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.0;
+
+contract test &#123;
+   enum FreshJuiceSize&#123; SMALL, MEDIUM, LARGE &#125;
+   FreshJuiceSize choice;
+   FreshJuiceSize constant defaultChoice = FreshJuiceSize.MEDIUM;
+
+   function setLarge() public &#123;
+      choice = FreshJuiceSize.LARGE;
+   &#125;
+   function getChoice() public view returns (FreshJuiceSize) &#123;
+      return choice;
+   &#125;
+   function getDefaultChoice() public pure returns (uint) &#123;
+      return uint(defaultChoice);
+   &#125;
+&#125;
+</code></pre>
+<p><strong>结构体（Struct）</strong></p>
+<p>与C类似</p>
+<pre><code class="lang-solidity">//SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.5.0;
+
+contract test &#123;
+   struct Book &#123; 
+      string title;
+      string author;
+      uint book_id;
+   &#125;
+   Book book;
+
+   function setBook() public &#123;
+      book = Book(&#39;Learn Java&#39;, &#39;TP&#39;, 1);
+   &#125;
+   function getBookId() public view returns (uint) &#123;
+      return book.book_id;
+   &#125;
+&#125;
+</code></pre>
+<p><strong>映射（mapping）</strong></p>
+<pre><code class="lang-solidity">mapping(_KeyType =&gt; _ValueType)
+</code></pre>
+<ul>
+<li><code>_KeyType</code> ：可以是任何内置类型，或者bytes和字符串。不允许使用引用类型或复杂对象</li>
+<li><code>_ValueType</code> ： 可以是任何类型</li>
+</ul>
+<p>注意</p>
+<ul>
+<li>映射的数据位置(data location)只能是storage，通常用于状态变量</li>
+<li>映射可以标记为public，Solidity 自动为它创建getter</li>
+</ul>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract LedgerBalance &#123;
+   mapping(address =&gt; uint) public balances;
+
+   function updateBalance(uint newBalance) public &#123;
+      balances[msg.sender] = newBalance;
+   &#125;
+&#125;
+contract Updater &#123;
+   function updateBalance() public returns (uint) &#123;
+      LedgerBalance ledgerBalance = new LedgerBalance();
+      ledgerBalance.updateBalance(10);
+      return ledgerBalance.balances(address(this));
+   &#125;
+&#125;
+</code></pre>
+<p>对示例代码写一点自己的理解：</p>
+<p>address是不可被运算的数据类型，因此需要map映射为uint，再参与运算</p>
+<p><strong>类型转换</strong></p>
+<p>可以使用构造函数语法，显式地将数据类型转换为另一种类型。</p>
+<pre><code class="lang-solidity">int8 y = -3;
+uint x = uint(y);
+//Now x = 0xfffff..fd == 在256bit长度的格式下，-3的补码表示
+</code></pre>
+<p>转换成更小的类型，会丢失高位。</p>
+<pre><code class="lang-solidity">uint32 a = 0x12345678;
+uint16 b = uint16(a); // b = 0x5678
+</code></pre>
+<p>转换成更大的类型，将向左侧添加填充位。</p>
+<pre><code class="lang-solidity">uint16 a = 0x1234;
+uint32 b = uint32(a); // b = 0x00001234
+</code></pre>
+<p>转换到更小的字节类型，会丢失后面数据。</p>
+<pre><code class="lang-solidity">bytes2 a = 0x1234;
+bytes1 b = bytes1(a); // b = 0x12
+</code></pre>
+<p>转换为更大的字节类型时，向右添加填充位。</p>
+<pre><code class="lang-solidity">bytes2 a = 0x1234;
+bytes4 b = bytes4(a); // b = 0x12340000
+</code></pre>
+<p>只有当字节类型和int类型大小相同时，才可以进行转换。</p>
+<pre><code class="lang-solidity">bytes2 a = 0x1234;
+uint32 b = uint16(a); // b = 0x00001234
+uint32 c = uint32(bytes4(a)); // c = 0x12340000
+uint8 d = uint8(uint16(a)); // d = 0x34
+uint8 e = uint8(bytes1(a)); // e = 0x12
+</code></pre>
+<p>把整数赋值给整型时，不能超出范围，发生截断，否则会报错。</p>
+<pre><code class="lang-solidity">uint8 a = 12; // no error
+uint32 b = 1234; // no error
+uint16 c = 0x123456; // error, 有截断，变为 0x3456
+</code></pre>
+<p><strong>以太单位</strong></p>
+<p>Solidity 中，以太币的单位可以使用<code>wei</code>、<code>finney</code>、<code>szabo</code>或<code>ether</code>表示。</p>
+<p>最小的单位是<code>wei</code>。<code>1e12</code>表示<code>1 x 10^12</code>。</p>
+<pre><code class="lang-solidity">assert(1 wei == 1);
+assert(1 szabo == 1e12);
+assert(1 finney == 1e15);
+assert(1 ether == 1e18);
+</code></pre>
+<p><strong>函数</strong></p>
+<p>语法：</p>
+<pre><code class="lang-solidity">function function-name(parameter-list) scope returns() &#123;
+   //语句
+&#125;
+</code></pre>
+<p>return语句可以返回多个值</p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Test &#123;
+   function getResult() public view returns(uint product, uint sum)&#123;
+      uint a = 1; // 局部变量
+      uint b = 2;
+      product = a * b; // 使用返回参数返回值
+      sum = a + b; // 使用返回参数返回值
+
+      // 也可以使用return返回多个值
+      // return(a*b, a+b);
+   &#125;
+&#125;
+</code></pre>
+<p>修饰符：</p>
+<p>函数修饰符用于修改函数的行为。例如，向函数添加条件限制。</p>
+<p>修饰符定义中出现特殊符号<code>_</code><br>的地方，用于插入函数体。如果在调用此函数时，满足了修饰符的条件，则执行该函数，否则将抛出异常。</p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Owner &#123;
+   address owner;
+
+   constructor() public &#123;
+      owner = msg.sender;
+   &#125;
+
+   // 定义修饰符 onlyOwner 不带参数
+   modifier onlyOwner &#123;
+      require(msg.sender == owner);
+      _;
+   &#125;
+
+   // 定义修饰符 costs 带参数
+   modifier costs(uint price) &#123;
+      if (msg.value &gt;= price) &#123;
+         _;
+      &#125;
+   &#125;
+&#125;
+
+contract Register is Owner &#123;
+   mapping (address =&gt; bool) registeredAddresses;
+   uint price;
+
+   constructor(uint initialPrice) public &#123; price = initialPrice; &#125;
+
+   // 使用修饰符 costs
+   function register() public payable costs(price) &#123;
+      registeredAddresses[msg.sender] = true;
+   &#125;
+
+   // 使用修饰符 onlyOwner
+   function changePrice(uint _price) public onlyOwner &#123;
+      price = _price;
+   &#125;
+&#125;
+</code></pre>
+<p>其中<code>onlyOwner</code>和<code>costs</code>是修饰符</p>
+<p>view(视图)函数：</p>
+<p>View(视图)函数不会修改状态。如果函数中存在以下语句，则被视为修改状态，编译器将抛出警告。</p>
+<ul>
+<li>修改状态变量。</li>
+<li>触发事件。</li>
+<li>创建合约。</li>
+<li>使用<code>selfdestruct</code>。</li>
+<li>发送以太。</li>
+<li>调用任何不是视图函数或纯函数的函数</li>
+<li>使用底层调用</li>
+<li>使用包含某些操作码的内联程序集。</li>
+</ul>
+<p>Getter方法是默认的视图函数。声明视图函数，可以在函数声明里，添加<code>view</code>关键字。</p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Test &#123;
+   function getResult() public view returns(uint product, uint sum)&#123;
+      uint a = 1; // 局部变量
+      uint b = 2;
+      product = a * b;
+      sum = a + b; 
+   &#125;
+&#125;
+</code></pre>
+<p>pure(纯)函数：</p>
+<p>Pure(纯)函数<strong>不读取</strong>或修改状态。如果函数中存在以下语句，则被视为读取状态，编译器将抛出警告。</p>
+<ul>
+<li>读取状态变量。</li>
+<li>访问 <code>address(this).balance</code> 或 <code>&lt;address&gt;.balance</code></li>
+<li>访问任何区块、交易、msg等特殊变量(msg.sig 与 msg.data 允许读取)。</li>
+<li>调用任何不是纯函数的函数。</li>
+<li>使用包含特定操作码的内联程序集。</li>
+</ul>
+<p>如果发生错误，纯函数可以使用<code>revert()</code>和<code>require()</code>函数来还原潜在的状态更改。</p>
+<p>声明纯函数，可以在函数声明里，添加<code>pure</code>关键字。</p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Test &#123;
+   function getResult() public pure returns(uint product, uint sum)&#123;
+      uint a = 1; 
+      uint b = 2;
+      product = a * b;
+      sum = a + b; 
+   &#125;
+&#125;
+</code></pre>
+<p>fallback(回退)函数：</p>
+<p>fallback(回退) 函数是合约中的特殊函数。它有以下特点</p>
+<ul>
+<li>当合约中不存在的函数被调用时，将调用fallback函数。</li>
+<li>被标记为外部函数。</li>
+<li>它没有名字。</li>
+<li>它没有参数。</li>
+<li>它不能返回任何东西。</li>
+<li>每个合约定义一个fallback函数。</li>
+<li>如果没有被标记为<code>payable</code>，则当合约收到无数据的以太币转账时，将抛出异常。</li>
+</ul>
+<p>语法</p>
+<pre><code class="lang-solidity">// 没有名字，没有参数，不返回，标记为external，可以标记为payable
+function() external &#123;
+    // statements
+&#125;
+</code></pre>
+<p>下面的示例展示了合约中的回退函数概念。</p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Test &#123;
+   uint public x ;
+   function() external &#123; x = 1; &#125;    
+&#125;
+contract Sink &#123;
+   function() external payable &#123; &#125;
+&#125;
+contract Caller &#123;
+
+   function callTest(Test test) public returns (bool) &#123;
+      (bool success,) = address(test).call(abi.encodeWithSignature(&quot;nonExistingFunction()&quot;));
+      require(success);
+      // test.x 是 1
+
+      address payable testPayable = address(uint160(address(test)));
+
+      // 发送以太测试合同,
+      // 转账将失败，也就是说，这里返回false。
+      return (testPayable.send(2 ether));
+   &#125;
+
+   function callSink(Sink sink) public returns (bool) &#123;
+      address payable sinkPayable = address(sink);
+      return (sinkPayable.send(2 ether));
+   &#125;
+&#125;
+</code></pre>
+<p><strong>函数重载</strong></p>
+<p>同一个作用域内，相同函数名可以定义多个函数。这些函数的参数(参数类型或参数数量)必须不一样。仅仅是返回值不一样不被允许</p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Test &#123;
+   function getSum(uint a, uint b) public pure returns(uint)&#123;      
+      return a + b;
+   &#125;
+   function getSum(uint a, uint b, uint c) public pure returns(uint)&#123;      
+      return a + b + c;
+   &#125;
+   function callSumWithTwoArguments() public pure returns(uint)&#123;
+      return getSum(1,2);
+   &#125;
+   function callSumWithThreeArguments() public pure returns(uint)&#123;
+      return getSum(1,2,3);
+   &#125;
+&#125;
+
+//0: uint256: 3
+//0: uint256: 6
+</code></pre>
+<p><strong>数学函数</strong></p>
+<p>Solidity提供内置的数学函数，如：</p>
+<ul>
+<li><code>addmod(uint x, uint y, uint k) returns (uint)</code> 计算(x + y) % k，计算中，以任意精度执行加法，且不限于2^256大小。</li>
+<li><code>mulmod(uint x, uint y, uint k) returns (uint)</code> 计算(x * y) % k，计算中，以任意精度执行乘法，且不限于2^256大小。</li>
+</ul>
+<p><strong>加密函数</strong></p>
+<p>Solidity 提供了常用的加密函数。以下是一些重要函数：</p>
+<ul>
+<li><code>keccak256(bytes memory) returns (bytes32)</code> 计算输入的Keccak-256散列。</li>
+<li><code>sha256(bytes memory) returns (bytes32)</code> 计算输入的SHA-256散列。</li>
+<li><code>ripemd160(bytes memory) returns (bytes20)</code> 计算输入的RIPEMD-160散列。</li>
+<li><code>ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)</code> 从椭圆曲线签名中恢复与公钥相关的地址，或在出错时返回零。函数参数对应于签名的ECDSA值: r – 签名的前32字节; s: 签名的第二个32字节; v: 签名的最后一个字节。这个方法返回一个地址。</li>
+</ul>
+<p><strong>合约继承</strong></p>
+<pre><code class="lang-solidity">pragma solidity ^0.8.0;
+
+contract A &#123;
+   ...
+&#125;
+
+contract B is A &#123;
+   ...
+&#125;
+</code></pre>
+<p><strong>构造函数</strong></p>
+<p>构造函数是使用<code>construct</code>关键字声明的特殊函数，用于初始化合约的状态变量。合约中构造函数是可选的，可以省略。</p>
+<p>构造函数有以下重要特性：</p>
+<ul>
+<li>一个合约只能有一个构造函数。</li>
+<li>构造函数在创建合约时执行一次，用于初始化合约状态。</li>
+<li>在执行构造函数之后，合约最终代码被部署到区块链。合约最终代码包括公共函数和可通过公共函数访问的代码。构造函数代码或仅由构造函数使用的任何内部方法不包括在最终代码中。</li>
+<li>构造函数可以是公共的，也可以是内部的。</li>
+<li>内部构造函数将合约标记为抽象合约。</li>
+<li>如果没有定义构造函数，则使用默认构造函数。</li>
+</ul>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Test &#123;
+   constructor() public &#123;&#125;
+&#125;
+</code></pre>
+<ul>
+<li>如果基合约具有带参数的构造函数，则每个派生/继承的合约也都必须包含参数。</li>
+<li>可以使用下面的方法直接初始化基构造函数</li>
+</ul>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Base &#123;
+   uint data;
+   constructor(uint _data) public &#123;
+      data = _data;
+   &#125;
+&#125;
+contract Derived is Base (5) &#123;
+   constructor() public &#123;&#125;
+&#125;
+</code></pre>
+<ul>
+<li>可以使用以下方法间接初始化基构造函数</li>
+</ul>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Base &#123;
+   uint data;
+   constructor(uint _data) public &#123;
+      data = _data;
+   &#125;
+&#125;
+contract Derived is Base &#123;
+   constructor(uint _info) Base(_info * _info) public &#123;&#125;
+&#125;
+</code></pre>
+<ul>
+<li>不允许直接或间接地初始化基合约构造函数。</li>
+<li>如果派生合约没有将参数传递给基合约构造函数，则派生合约将成为抽象合约。</li>
+</ul>
+<p><strong>抽象合约</strong></p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Calculator &#123;
+   function getResult() public view returns(uint);
+&#125;
+
+contract Test is Calculator &#123;
+   function getResult() public view returns(uint) &#123;
+      uint a = 1;
+      uint b = 2;
+      uint result = a + b;
+      return result;
+   &#125;
+&#125;
+</code></pre>
+<p><strong>接口</strong></p>
+<p>接口类似于抽象合约，使用<code>interface</code>关键字创建，接口只能包含抽象函数，不能包含函数实现。以下是接口的关键特性：</p>
+<ul>
+<li>接口的函数只能是外部类型。</li>
+<li>接口不能有构造函数。</li>
+<li>接口不能有状态变量。</li>
+<li>接口可以包含enum、struct定义，可以使用<code>interface_name.</code>访问它们。</li>
+</ul>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+interface Calculator &#123;
+   function getResult() external view returns(uint);
+&#125;
+
+contract Test is Calculator &#123;
+   constructor() public &#123;&#125;
+   function getResult() external view returns(uint)&#123;
+      uint a = 1; 
+      uint b = 2;
+      uint result = a + b;
+      return result;
+   &#125;
+&#125;
+</code></pre>
+<p><strong>库</strong></p>
+<p>Solidity中，对库的使用有一定的限制。以下是库的主要特征。</p>
+<ul>
+<li>如果库函数不修改状态，则可以直接调用它们。这意味着<a target="_blank" rel="noopener" href="https://www.qikegu.com/docs/4963">纯函数</a>或<a target="_blank" rel="noopener" href="https://www.qikegu.com/docs/4961">视图函数</a>只能从库外部调用。</li>
+<li>库不能被销毁，因为它被认为是无状态的。</li>
+<li>库不能有状态变量。</li>
+<li>库不能继承任何其他元素。</li>
+<li>库不能被继承。</li>
+</ul>
+<p>使用library声明，使用<code>&lt;library_name&gt;.&lt;func_name&gt;</code></p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+library Search &#123;
+   function indexOf(uint[] storage self, uint value) public view returns (uint) &#123;
+      for (uint i = 0; i &lt; self.length; i++) if (self[i] == value) return i;
+      return uint(-1);
+   &#125;
+&#125;
+contract Test &#123;
+   uint[] data;
+   constructor() public &#123;
+      data.push(1);
+      data.push(2);
+      data.push(3);
+      data.push(4);
+      data.push(5);
+   &#125;
+   function isValuePresent() external view returns(uint)&#123;
+      uint value = 4;
+
+      // 使用库函数搜索数组中是否存在值
+      uint index = Search.indexOf(data, value);
+      return index;
+   &#125;
+&#125;
+</code></pre>
+<p><strong><strong>使用汇编(Assembly)代码</strong></strong></p>
+<p>使用内联汇编，可以在solidity中嵌入汇编代码，使用</p>
+<pre><code class="lang-solidity">assembly&#123;
+    ...
+&#125;
+</code></pre>
+<p><strong>事件</strong></p>
+<p>事件是智能合约发出的信号。智能合约的前端UI，例如，DApps、web.js，或者任何与Ethereum JSON-RPC API连接的东西，都可以侦听这些事件。事件可以被索引，以便以后可以搜索事件记录。</p>
+<blockquote>
+<p>事件在区块链中的存储</p>
+<p>区块链是一个区块链表，这些块的内容基本上是交易记录。每个交易都有一个附加的交易日志，事件结果存放在交易日志里。合约发出的事件，可以使用合约地址访问。</p>
+</blockquote>
+<p>Solidity中可以使用<code>event</code>关键字(在用法上类似于<code>function</code>关键字)。然后可以在函数中使用<code>emit</code>关键字触发事件</p>
+<p>创建合约并发出一个事件</p>
+<pre><code class="lang-solidity">pragma solidity ^0.5.0;
+
+contract Counter &#123;
+    uint256 public count = 0;
+
+    event Increment(address who);   // 声明事件
+
+    function increment() public &#123;
+        emit Increment(msg.sender); // 触发事件
+        count += 1;
+    &#125;
+&#125;
+</code></pre>
+  </div>
+  
+    
+      <a id="older" class="blog-nav" href="/2023/02/05/%E8%AE%B0%E4%B8%80%E4%B8%AANTRU%E6%9D%BF%E5%AD%90%E9%A2%98/">OLDER&nbsp;&gt;</a>
+      
+        
+          <a id="newer" class="blog-nav" href="/2023/07/11/AES%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%80%97%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98/">&lt;&nbsp;NEWER</a>
+          
+            
+</div>
+        <div class="footer">
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/leedom92/hexo-theme-leedom">Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="back-to-top hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+      
+  <div class="search-icon" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-box">
+        <div class="search-title">
+          <!-- <span class="search-icon-input">
+            <a href="javascript: void(0)">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </span> -->
+          
+            <input type="text" class="search-input" id="search-input" placeholder="搜索">
+          
+          <span class="search-close-icon" id="search-close-icon">
+            <a href="javascript: void(0)">
+              <i class="iconfont icon-close"></i>
+            </a>
+          </span>
+        </div>
+        <div class="search-result" id="search-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    // inputArea.onclick = function() {
+    //   getSearchFile()
+    //   this.onclick = null
+    // }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        inputArea.focus()
+        getSearchFile()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'><span></ul>";
+      // $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'><h2>" + orig_data_title + "</h2></a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<h3 class=\"search-result-abstract\">" + match_content + "...</h3>"
+                }
+                str += "<hr></li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/leedom92/hexo-theme-leedom#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+    </div>
+  </body>
+</html>

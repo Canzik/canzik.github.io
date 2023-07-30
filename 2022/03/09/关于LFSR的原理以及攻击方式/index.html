@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Canzik" />
+  <meta name="description" content="世界上只有一种真正的英雄主义，那就是在认清生活的真相后依然热爱生活。" />
+  
+  
+  <title>
+    
+      关于LFSR的原理以及攻击方式 
+      
+      
+    
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto:400,400italic,600|Roboto+Mono" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+
+
+  
+
+  
+    
+<link rel="stylesheet" href="/css/post.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+<meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <a href="/">Canzik</a>
+</div>
+
+
+      <p class="links">
+  
+    <a title="archives" target="" href="/archives/">
+      <i class="iconfont icon-bookmark"></i>
+    </a>
+  
+    <a title="github" target="_blank" href="https://github.com/Canzik">
+      <i class="iconfont icon-github"></i>
+    </a>
+  
+    <a title="email" target="" href="canzikkai@gmail.com">
+      <i class="iconfont icon-envelope"></i>
+    </a>
+  
+    <a title="rss" target="_blank" href="/atom.xml">
+      <i class="iconfont icon-rss"></i>
+    </a>
+  
+</p>
+
+
+      <div class="main">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+
+<div class="post">
+  <h3 class="date">
+    Mar 09, 2022
+  </h3>
+  <h1>
+    关于LFSR的原理以及攻击方式
+  </h1>
+  <div class="content markdown-body">
+    <p>一个LFSR由若干时钟存储元件（触发器）和一个反馈路径组成。存储元件的数目即为LFSR的度，即一个拥有m个存储元件的LFSR可称为“度为m”。反馈网络计算位移寄存器中某些触发器的XOR和，并将其作为上一个触发器的输入。</p>
+<p>举个简单的LFSR例子：</p>
+<p><img src="https://s2.loli.net/2022/03/09/g9uUFiw1pb2xDZA.png" alt="img"></p>
+<p>图为拥有三个触发器FF<sub>0</sub>,FF<sub>1,FF<sub>2</sub>的LFSR，即此LFSR的度为3，反馈路径如图所示，内部状态用s<sub>i</sub>表示。在每个时钟滴答内，内部状态会向右移动一位。最右边为LFSR的输出位，最左边位输入位。输入位的状态是在反馈路径中计算的，它是前面时钟周期中一些触发器的XOR和。</sub></p>
+<p>假设初始状态s<sub>0</sub>=0、s<sub>1</sub>=0、s<sub>2</sub>=1，则计算可得此LFSR产生的序列为0100111，周期长度为7</p>
+<p>据此可写出计算LFSR输出位的公式：</p>
+<p>假设初始状态位s<sub>0</sub>、s<sub>1</sub>、s<sub>2</sub>，可得</p>
+<p><img src="https://s2.loli.net/2022/03/09/9bzgylwjH6Qfqc7.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s3 \equiv s_1+s_0\ mod\ 2\\
+s4 \equiv s_2+s_1\ mod\ 2\\
+s5 \equiv s_3+s_2\ mod\ 2\\
+...\\
+s_{i+3} \equiv\ s_{i+1}+s_i\ mod\ 2</script><p>其中i=0,1,2…</p>
+<p>这个例子非常简单，但阐明了LFSR的原理，接下来看看通用的LFSR</p>
+<h2 id="1-LFSR的数学描述"><a href="#1-LFSR的数学描述" class="headerlink" title="1.LFSR的数学描述"></a><strong>1.LFSR的数学描述</strong></h2><p><img src="https://s2.loli.net/2022/03/09/ghToyJekLKw5zUE.png" alt="img"></p>
+<p>这张展示了一个度为m的LFSR，这个LFSR拥有m个可能的反馈位置，触发器与反馈位置通过XOR连接。之所以将反馈位置称为“可能”，是因为每条反馈路径的活跃与否取决于p<sub>0</sub>,p<sub>1</sub>,p<sub>2</sub>,…,p<sub>m-1</sub>：</p>
+<ul>
+<li>如果p<sub>i</sub>=1(关闭开关)，此反馈是活跃的</li>
+<li>如果P<sub>i</sub>=0(打开开关)，对应触发器的输出将不会反馈</li>
+</ul>
+<p>于是可以将一个触发器的输出通过输出值与对应系数的乘积来表示，即p<sub>i</sub>*s<sub>i</sub></p>
+<p>假设某个LFSR的初始加载值为s<sub>0</sub>,s<sub>1</sub>,s<sub>2</sub>,…,s<sub>m-1</sub>,则下一个输出位可通过触发器输出值与对应系数的乘积的XOR和表示：</p>
+<p><img src="https://s2.loli.net/2022/03/09/Fkr5sbJmA7TojB4.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_m \equiv s_0p_0+s_1p_1+...+s_{m-1}p_{m-1}\ mod\ 2</script><p>下一个为</p>
+<p><img src="https://s2.loli.net/2022/03/09/mYX4UGcaCsDwiJe.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_{m+1} \equiv s_0p_0+s_1p_1+...+s_mp_m\ mod\ 2</script><p>归纳一下，输出序列可描述为：</p>
+<p><img src="https://s2.loli.net/2022/03/09/27STZfGUgCwXlNz.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_{i+m} \equiv \sum_{j=0}^{m-1}p_j*s_{i+j}\ mod\ 2;\ s_i,p_j\in \{0,1\};\ i=0,1,2 ...</script><p>此处提出一定理：<strong>度为m的LFSR可以产生的最大序列长度为2<sup>m</sup>-1</strong></p>
+<h2 id="2-关于LFSR的其它属性"><a href="#2-关于LFSR的其它属性" class="headerlink" title="2.关于LFSR的其它属性"></a><strong>2.关于LFSR的其它属性</strong></h2><p>LFSR通常用以下多项式来指定：反馈系数向量为(p<sub>m-1</sub>,p<sub>m-2</sub>,p<sub>m-3</sub>,…,p<sub>0</sub>)的LFSR可以表示为以下多项式：</p>
+<p><img src="https://s2.loli.net/2022/03/09/XzCPeYtFLWhwgHS.png" alt="img"></p>
+<script type="math/tex; mode=display">
+P(x)=x^m+p_{m-1}x^{m-1}+...+p_1x+p_0</script><p>例如，系数为(p<sub>3</sub>=0,p<sub>2</sub>=0,p<sub>1</sub>=1,p<sub>0</sub>=0)d的LFSR可以表示为多项式：x<sup>4</sup>+x+1</p>
+<p>当LFSR拥有最大长度（即周期）时，对应的的反馈系数向量多项式被称为本原多项式。对于一个给定的度m而言，可能存在多个本原多项式</p>
+<h2 id="3-针对单个LFSR的攻击"><a href="#3-针对单个LFSR的攻击" class="headerlink" title="3.针对单个LFSR的攻击"></a><strong>3.针对单个LFSR的攻击</strong></h2><p>谈完了LFSR的原理，现在来说一下针对LFSR的攻击方式</p>
+<p>假设攻击者Oscar知道部分明文和对应的密文，他就可以发起攻击。假设Oscar知道明文x<sub>0</sub>,x<sub>1</sub>,…,x<sub>2m-1</sub>，它们对应的密文为y<sub>0</sub>,y<sub>1</sub>,…y<sub>2m-1</sub>。Oscar利用这2m对明文和密文位，就可以重构开头的2m个密钥序列</p>
+<p><img src="https://s2.loli.net/2022/03/09/FPi6ltMHrSbgo5O.png" alt="img"></p>
+<script type="math/tex; mode=display">
+s_i\equiv x_i+y_i\ mod\ 2;\ \ \ i=0,1,2,..,2m-1</script><p>接下来就是计算出反馈系数向量p<sub>i</sub>。根据输出序列的公式，可以得到如下式子</p>
+<p><img src="https://s2.loli.net/2022/03/09/OSmnuK8cxehBQaF.png" alt="img"></p>
+<script type="math/tex; mode=display">
+i=0,\ s_m\equiv p_{m-1}s_{m-1}+...+p_1s_1+p_0s_0\ mod\ 2\\
+i=1,\ s_{m+1}\equiv p_{m-1}s_m+...+p_1s_2+p_0s_1\ mod\ 2\\
+...\\
+i=m-1,\ s_{2m-1}\equiv p_{m-1}s_{2m-2}+...p_1s_m+p_0s_{m-1}\ mod\ 2\\</script><p>上述等式中每一个都是线性无关的，故现在有了含m个未知数P<sub>m-1</sub>,…,p<sub>1</sub>,p<sub>0</sub>的m个线性等式。利用高斯消去或矩阵求逆等求解方程便可以构造出反馈系数向量，并以此计算任意m个输出位，得到整个输出序列。正因为这种强大的攻击方式，不少序列密码都是使用多个LFSR组合的方式构建强壮的密码体制，Trivium就是一个很好的例子</p>
+<p><img src="https://s2.loli.net/2022/03/09/V5DoX3ePglpJUYh.png" alt="img"></p>
+<blockquote>
+<p>注：插图来自《深入浅出密码学》</p>
+</blockquote>
+  </div>
+  
+    
+      <a id="older" class="blog-nav" href="/2022/03/03/%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982021wp/">OLDER&nbsp;&gt;</a>
+      
+        
+          <a id="newer" class="blog-nav" href="/2022/03/11/D3CTF--d3factor%E5%A4%8D%E7%8E%B0/">&lt;&nbsp;NEWER</a>
+          
+            
+</div>
+        <div class="footer">
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/leedom92/hexo-theme-leedom">Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="back-to-top hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+      
+  <div class="search-icon" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-box">
+        <div class="search-title">
+          <!-- <span class="search-icon-input">
+            <a href="javascript: void(0)">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </span> -->
+          
+            <input type="text" class="search-input" id="search-input" placeholder="搜索">
+          
+          <span class="search-close-icon" id="search-close-icon">
+            <a href="javascript: void(0)">
+              <i class="iconfont icon-close"></i>
+            </a>
+          </span>
+        </div>
+        <div class="search-result" id="search-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    // inputArea.onclick = function() {
+    //   getSearchFile()
+    //   this.onclick = null
+    // }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        inputArea.focus()
+        getSearchFile()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'><span></ul>";
+      // $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'><h2>" + orig_data_title + "</h2></a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<h3 class=\"search-result-abstract\">" + match_content + "...</h3>"
+                }
+                str += "<hr></li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/leedom92/hexo-theme-leedom#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+    </div>
+  </body>
+</html>
