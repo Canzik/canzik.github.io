@@ -229,10 +229,10 @@ mjx-container[display="true"] + br {
 </ol>
 <pre><code class="lang-python"># sagemath
 def SmartAttack(P,Q,p):
-    E = P.curve()  #获取P点的曲线
-    Eqp = EllipticCurve(Qp(p, 2), [ ZZ(t) + randint(0,p)*p for t in E.a_invariants() ])  #Qp()提升到p适域，E.a_invariants()读取E的不变量参数(a, b)
+    E = P.curve()
+    Eqp = EllipticCurve(Qp(p, 2), [ ZZ(t) + randint(0,p)*p for t in E.a_invariants() ])
 
-    P_Qps = Eqp.lift_x(ZZ(P.xy()[0]), all=True)  #all=True 返回所有值
+    P_Qps = Eqp.lift_x(ZZ(P.xy()[0]), all=True)
     for P_Qp in P_Qps:
         if GF(p)(P_Qp.xy()[1]) == P.xy()[1]:  #验证正确性
             break
