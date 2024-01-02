@@ -1,194 +1,38 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-  <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="" />
-  <meta name="author" content="Canzik" />
-  <meta name="description" content="世界上只有一种真正的英雄主义，那就是在认清生活的真相后依然热爱生活。" />
-  
-  
-  <title>
-    
-      Solidity Note 
-      
-      
-    
-  </title>
-
-  
-    <link rel="apple-touch-icon" href="/images/favicon.png">
-    <link rel="icon" href="/images/favicon.png">
-  
-
-  <!-- Raleway-Font -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto:400,400italic,600|Roboto+Mono" rel="stylesheet">
-
-  <!-- hexo site css -->
-  
-<link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/common.css">
-<link rel="stylesheet" href="/iconfont/iconfont.css">
-
-
-  
-
-  
-    
-<link rel="stylesheet" href="/css/post.css">
-
-  
-
-  <!-- jquery3.3.1 -->
-  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-
-  <!-- fancybox -->
-  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
-  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
-  
-<script src="/js/fancybox.js"></script>
-
-
-<meta name="generator" content="Hexo 6.0.0"></head>
-
-
-  <body>
-    <div id="app">
-      <div class="header">
-  <a href="/">Canzik</a>
-</div>
-
-
-      <p class="links">
-  
-    <a title="archives" target="" href="/archives/">
-      <i class="iconfont icon-bookmark"></i>
-    </a>
-  
-    <a title="github" target="_blank" href="https://github.com/Canzik">
-      <i class="iconfont icon-github"></i>
-    </a>
-  
-    <a title="email" target="" href="canzikkai@gmail.com">
-      <i class="iconfont icon-envelope"></i>
-    </a>
-  
-    <a title="rss" target="_blank" href="/atom.xml">
-      <i class="iconfont icon-rss"></i>
-    </a>
-  
-</p>
-
-
-      <div class="main">
-        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
-<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
-
-<!-- LaTex Display -->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-</script>
-<script>
-  MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']]
-    }
-  };
-</script>
-
-<div class="post">
-  <h3 class="date">
-    Jun 23, 2023
-  </h3>
-  <h1>
-    Solidity Note
-  </h1>
-  <div class="content markdown-body">
-    <h2 id="简单的智能合约">简单的智能合约</h2>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="author" content="Canzik"><meta name="desciption" content="世界上只有一种真正的英雄主义，那就是在认清生活的真相后依然热爱生活。"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Solidity Note</title><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/normalize/3.0.3/normalize.min.css"><link rel="stylesheet" type="text/css" href="/css/carbon.css"><script defer="defer" src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script><script defer="defer" src="//cdn.jsdelivr.net/jquery.pjax/1.9.5/jquery.pjax.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.css" type="text/css" media="screen"><script defer="defer" type="text/javascript" src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>var performFancybox = true;</script><script>var doRenderMath = 'mathjax'</script><!--mathjax config similar to math.stackexchange--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: true
+  }
+});</script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  }
+});</script><script async type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script defer="defer" src="/js/carbon.js"></script><meta name="generator" content="Hexo 6.0.0"></head><body><div id="container"><div id="banner"><h1 id="site-title"><a href="/">Canzik's Blog</a></h1><p id="site-subtitle"></p></div><div id="content"><div class="meta"><h2 class="article-title"><a href="/2023/06/23/Solidity%20Note">Solidity Note</a></h2><div class="article-date"><a href="javascript:void(0);" class="extra-switch">2023-06-23</a></div></div><div class="extra"><span class="Tags">Tags: <a href="/tags/Blockchain/">Blockchain</a>.</span></div><div class="extra"><span class="Categories">Categories: <a href="/categories/notes/">notes</a>.</span></div><div class="article-content"><div class="gallery"></div><p>粗浅地学习了一下solidity</p>
+<span id="more"></span>
+<h2 id="简单的智能合约">简单的智能合约</h2>
 <p>Solidity中智能合约的含义就是一组代码（它的 <em>功能</em> )和数据（它的 <em>状态</em>）的集合，并且它们是位于以太坊区块链的一个特定地址上的</p>
 <p><strong>存储合约示例</strong></p>
-<pre class="solidity"><code>// SPDX-License-Identifier: GPL-3.0
-pragma solidity &gt;=0.4.16 &lt;0.9.0;  //声明版本范围
-
-contract SimpleStorage &#123;
-    uint storedData;  //uint 256位无符号整数
-
-    function set(uint x) public &#123;
-        storedData = x;   //solidity中不需要用this.访问
-    &#125;
-
-    function get() public view returns (uint) &#123;
-        return storedData;
-    &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: GPL-3.0</span><br><span class="line">pragma solidity &gt;=0.4.16 &lt;0.9.0;  //声明版本范围</span><br><span class="line"></span><br><span class="line">contract SimpleStorage &#123;</span><br><span class="line">    uint storedData;  //uint 256位无符号整数</span><br><span class="line"></span><br><span class="line">    function set(uint x) public &#123;</span><br><span class="line">        storedData = x;   //solidity中不需要用this.访问</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function get() public view returns (uint) &#123;</span><br><span class="line">        return storedData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>set</code>：修改变量storeData的值</p>
 <p><code>get</code>：检索变量storeData的值</p>
 <p>这个简单的合约允许任何人在合约中存储一个单独的数字，并且这个数字可以被任何人访问，且没有可行的方法阻止这个数字的发布</p>
 <p>****货币合约（Subcurrency）示例****</p>
-<pre class="solidity"><code>// SPDX-License-Identifier: GPL-3.0pragma solidity ^0.8.4;
-
-contract Coin &#123;
-    // 关键字“public”让这些变量可以从外部读取    
-    address public minter;
-    mapping (address =&gt; uint) public balances;
-
-    // 轻客户端可以通过事件针对变化作出高效的反应    
-    event Sent(address from, address to, uint amount);
-
-    // 这是构造函数，只有当合约创建时运行    
-    constructor() &#123;
-        minter = msg.sender;
-    &#125;
-
-    function mint(address receiver, uint amount) public &#123;
-        require(msg.sender == minter);
-        balances[receiver] += amount;
-    &#125;
-
-   // Errors allow you to provide information about
-   // why an operation failed. They are returned
-   // to the caller of the function.    
-   error InsufficientBalance(uint requested, uint available);
-
-    function send(address receiver, uint amount) public &#123;
-        if (amount &gt; balances[msg.sender])
-            revert InsufficientBalance(&#123;
-                requested: amount,
-                available: balances[msg.sender]
-            &#125;);
-
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
-        emit Sent(msg.sender, receiver, amount);
-    &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: GPL-3.0pragma solidity ^0.8.4;</span><br><span class="line"></span><br><span class="line">contract Coin &#123;</span><br><span class="line">    // 关键字“public”让这些变量可以从外部读取    </span><br><span class="line">    address public minter;</span><br><span class="line">    mapping (address =&gt; uint) public balances;</span><br><span class="line"></span><br><span class="line">    // 轻客户端可以通过事件针对变化作出高效的反应    </span><br><span class="line">    event Sent(address from, address to, uint amount);</span><br><span class="line"></span><br><span class="line">    // 这是构造函数，只有当合约创建时运行    </span><br><span class="line">    constructor() &#123;</span><br><span class="line">        minter = msg.sender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function mint(address receiver, uint amount) public &#123;</span><br><span class="line">        require(msg.sender == minter);</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   // Errors allow you to provide information about</span><br><span class="line">   // why an operation failed. They are returned</span><br><span class="line">   // to the caller of the function.    </span><br><span class="line">   error InsufficientBalance(uint requested, uint available);</span><br><span class="line"></span><br><span class="line">    function send(address receiver, uint amount) public &#123;</span><br><span class="line">        if (amount &gt; balances[msg.sender])</span><br><span class="line">            revert InsufficientBalance(&#123;</span><br><span class="line">                requested: amount,</span><br><span class="line">                available: balances[msg.sender]</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">        balances[msg.sender] -= amount;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">        emit Sent(msg.sender, receiver, amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>address public minter</code>：</p>
 <p>address是个160位的值，且不允许任何算数操作。关键字<code>public</code>自动生成一个函数，允许在此合约之外访问这个状态变量的当前值。public会由编译器自动生成一段函数，代码大致如下（暂时忽略
 external 和 view）：</p>
-<pre class="solidity"><code>function minter() external view returns (address) &#123; return minter; &#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function minter() external view returns (address) &#123; return minter; &#125;</span><br></pre></td></tr></table></figure>
 <p>在使用public后再加上这段代码会造成冲突，会出现同名的一个函数和一个变量</p>
 <p><code>mapping (address =&gt; uint) public balances</code>：</p>
 <p>mapping类型，将address映射为无符号整数（uint）。在使用mapping时，要么记住你添加到mapping中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它。这里由public生成的函数要更加复杂一点，大致如下：</p>
-<pre class="solidity"><code>function balances(address account) external view returns (uint) &#123;
-    return balances[account];
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function balances(address account) external view returns (uint) &#123;</span><br><span class="line">    return balances[account];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以很轻松的查询账户的余额</p>
 <p><code>event Sent(address from, address to, uint amount)</code>：</p>
 <p>这行声明了一个所谓的“事件（event）”，它会在 <code>send</code> 函数的最后一行被发出。用户界面（当然也包括服务器应用程序）可以监听区块链上正在发送的事件，而不会花费太多成本。一旦它被发出，监听该事件的listener都将收到通知。而所有的事件都包含了 <code>from</code> ， <code>to</code> 和 <code>amount</code> 三个参数，可方便追踪交易。</p>
 <p>为了监听这个事件，你可以使用如下JavaScript代码， Coin 是通过 web3.js
 创建的合约对象  :</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode jsx"><code class="sourceCode javascriptreact"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Coin<span class="op">.</span><span class="fu">Sent</span>()<span class="op">.</span><span class="fu">watch</span>(&#123;&#125;<span class="op">,</span> <span class="st">&#39;&#39;</span><span class="op">,</span><span class="kw">function</span>(error<span class="op">,</span> result) &#123;</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="op">!</span>error) &#123;</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&quot;Coin transfer: &quot;</span> <span class="op">+</span> result<span class="op">.</span><span class="at">args</span><span class="op">.</span><span class="at">amount</span> <span class="op">+</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot; coins were sent from &quot;</span> <span class="op">+</span> result<span class="op">.</span><span class="at">args</span><span class="op">.</span><span class="at">from</span> <span class="op">+</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot; to &quot;</span> <span class="op">+</span> result<span class="op">.</span><span class="at">args</span><span class="op">.</span><span class="at">to</span> <span class="op">+</span> <span class="st">&quot;.&quot;</span>)<span class="op">;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&quot;Balances now:</span><span class="sc">\n</span><span class="st">&quot;</span> <span class="op">+</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Sender: &quot;</span> <span class="op">+</span> Coin<span class="op">.</span><span class="at">balances</span><span class="op">.</span><span class="fu">call</span>(result<span class="op">.</span><span class="at">args</span><span class="op">.</span><span class="at">from</span>) <span class="op">+</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Receiver: &quot;</span> <span class="op">+</span> Coin<span class="op">.</span><span class="at">balances</span><span class="op">.</span><span class="fu">call</span>(result<span class="op">.</span><span class="at">args</span><span class="op">.</span><span class="at">to</span>))<span class="op">;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    &#125;</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>&#125;)</span></code></pre></div>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Coin</span>.<span class="title class_">Sent</span>().<span class="title function_">watch</span>(&#123;&#125;, <span class="string">&#x27;&#x27;</span>,<span class="keyword">function</span>(<span class="params">error, result</span>) &#123;</span><br><span class="line"><span class="keyword">if</span> (!error) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Coin transfer: &quot;</span> + result.<span class="property">args</span>.<span class="property">amount</span> +</span><br><span class="line">            <span class="string">&quot; coins were sent from &quot;</span> + result.<span class="property">args</span>.<span class="property">from</span> +</span><br><span class="line">            <span class="string">&quot; to &quot;</span> + result.<span class="property">args</span>.<span class="property">to</span> + <span class="string">&quot;.&quot;</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Balances now:\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;Sender: &quot;</span> + <span class="title class_">Coin</span>.<span class="property">balances</span>.<span class="title function_">call</span>(result.<span class="property">args</span>.<span class="property">from</span>) +</span><br><span class="line">            <span class="string">&quot;Receiver: &quot;</span> + <span class="title class_">Coin</span>.<span class="property">balances</span>.<span class="title function_">call</span>(result.<span class="property">args</span>.<span class="property">to</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p><del>搞不懂event，菜的扣脚</del></p>
 <p><code>constructor</code>：</p>
 <p>创建合约期间运行的构造函数，不能在创建后调用。此合约中构造函数用来永久存储创建合约的人的地址<code>msg</code>。<code>msg.sender</code>始终记录当前（外部）函数调用是来自于哪一个地址</p>
@@ -201,20 +45,7 @@ class="sourceCode jsx"><code class="sourceCode javascriptreact"><span id="cb5-1"
 <p><code>~~emit</code>和<code>evnet</code>都不是很懂~~</p>
 <h2 id="knowledge-point">Knowledge point</h2>
 <p><strong>状态变量、局部变量、全局变量</strong></p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract SolidityTest &#123;
-   uint storedData; // 状态变量
-   constructor() public &#123;
-      storedData = 10;   
-   &#125;
-   function getResult() public view returns(uint)&#123;
-      uint a = 1; // 局部变量
-      uint b = 2;
-      uint result = a + b;
-      return result; // 访问局部变量
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract SolidityTest &#123;</span><br><span class="line">   uint storedData; // 状态变量</span><br><span class="line">   constructor() public &#123;</span><br><span class="line">      storedData = 10;   </span><br><span class="line">   &#125;</span><br><span class="line">   function getResult() public view returns(uint)&#123;</span><br><span class="line">      uint a = 1; // 局部变量</span><br><span class="line">      uint b = 2;</span><br><span class="line">      uint result = a + b;</span><br><span class="line">      return result; // 访问局部变量</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>状态变量：变量值永久保存在合约存储空间中的变量</li>
 <li>局部变量：变量值仅在函数执行过程中有效的变量，函数退出后，变量无效</li>
@@ -299,37 +130,7 @@ contract SolidityTest &#123;
 <li><strong>Private</strong> –
 私有状态变量只能从当前合约内部访问，派生合约内不能访问。</li>
 </ul>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract C &#123;
-   uint public data = 30;
-   uint internal iData= 10;
-
-   function x() public returns (uint) &#123;
-      data = 3; // 内部访问
-      return data;
-   &#125;
-&#125;
-contract Caller &#123;
-   C c = new C();
-   function f() public view returns (uint) &#123;
-      return c.data(); // 外部访问
-   &#125;
-&#125;
-contract D is C &#123;
-   uint storedData; // 状态变量
-
-   function y() public returns (uint) &#123;
-      iData = 3; // 派生合约内部访问
-      return iData;
-   &#125;
-   function getResult() public view returns(uint)&#123;
-      uint a = 1; // 局部变量
-      uint b = 2;
-      uint result = a + b;
-      return storedData; // 访问状态变量
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">   uint public data = 30;</span><br><span class="line">   uint internal iData= 10;</span><br><span class="line"></span><br><span class="line">   function x() public returns (uint) &#123;</span><br><span class="line">      data = 3; // 内部访问</span><br><span class="line">      return data;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">contract Caller &#123;</span><br><span class="line">   C c = new C();</span><br><span class="line">   function f() public view returns (uint) &#123;</span><br><span class="line">      return c.data(); // 外部访问</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">contract D is C &#123;</span><br><span class="line">   uint storedData; // 状态变量</span><br><span class="line"></span><br><span class="line">   function y() public returns (uint) &#123;</span><br><span class="line">      iData = 3; // 派生合约内部访问</span><br><span class="line">      return iData;</span><br><span class="line">   &#125;</span><br><span class="line">   function getResult() public view returns(uint)&#123;</span><br><span class="line">      uint a = 1; // 局部变量</span><br><span class="line">      uint b = 2;</span><br><span class="line">      uint result = a + b;</span><br><span class="line">      return storedData; // 访问状态变量</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>条件运算符</strong></p>
 <p><code>?:</code>：如果条件为真？则取值X：否则值Y</p>
 <aside>
@@ -367,47 +168,12 @@ contract D is C &#123;
 </ul>
 <p><strong>枚举（Enum）</strong></p>
 <p>枚举将一个变量的取值限制为几个预定义值中的一个。精确使用枚举类型有助于减少代码中的bug</p>
-<pre class="solidity"><code>//SPDX-License-Identifier: GPL-3.0
-
-pragma solidity ^0.8.0;
-
-contract test &#123;
-   enum FreshJuiceSize&#123; SMALL, MEDIUM, LARGE &#125;
-   FreshJuiceSize choice;
-   FreshJuiceSize constant defaultChoice = FreshJuiceSize.MEDIUM;
-
-   function setLarge() public &#123;
-      choice = FreshJuiceSize.LARGE;
-   &#125;
-   function getChoice() public view returns (FreshJuiceSize) &#123;
-      return choice;
-   &#125;
-   function getDefaultChoice() public pure returns (uint) &#123;
-      return uint(defaultChoice);
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//SPDX-License-Identifier: GPL-3.0</span><br><span class="line"></span><br><span class="line">pragma solidity ^0.8.0;</span><br><span class="line"></span><br><span class="line">contract test &#123;</span><br><span class="line">   enum FreshJuiceSize&#123; SMALL, MEDIUM, LARGE &#125;</span><br><span class="line">   FreshJuiceSize choice;</span><br><span class="line">   FreshJuiceSize constant defaultChoice = FreshJuiceSize.MEDIUM;</span><br><span class="line"></span><br><span class="line">   function setLarge() public &#123;</span><br><span class="line">      choice = FreshJuiceSize.LARGE;</span><br><span class="line">   &#125;</span><br><span class="line">   function getChoice() public view returns (FreshJuiceSize) &#123;</span><br><span class="line">      return choice;</span><br><span class="line">   &#125;</span><br><span class="line">   function getDefaultChoice() public pure returns (uint) &#123;</span><br><span class="line">      return uint(defaultChoice);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>结构体（Struct）</strong></p>
 <p>与C类似</p>
-<pre class="solidity"><code>//SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.5.0;
-
-contract test &#123;
-   struct Book &#123; 
-      string title;
-      string author;
-      uint book_id;
-   &#125;
-   Book book;
-
-   function setBook() public &#123;
-      book = Book(&#39;Learn Java&#39;, &#39;TP&#39;, 1);
-   &#125;
-   function getBookId() public view returns (uint) &#123;
-      return book.book_id;
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//SPDX-License-Identifier: GPL-3.0</span><br><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract test &#123;</span><br><span class="line">   struct Book &#123; </span><br><span class="line">      string title;</span><br><span class="line">      string author;</span><br><span class="line">      uint book_id;</span><br><span class="line">   &#125;</span><br><span class="line">   Book book;</span><br><span class="line"></span><br><span class="line">   function setBook() public &#123;</span><br><span class="line">      book = Book(&#x27;Learn Java&#x27;, &#x27;TP&#x27;, 1);</span><br><span class="line">   &#125;</span><br><span class="line">   function getBookId() public view returns (uint) &#123;</span><br><span class="line">      return book.book_id;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>映射（mapping）</strong></p>
-<pre class="solidity"><code>mapping(_KeyType =&gt; _ValueType)</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mapping(_KeyType =&gt; _ValueType)</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>_KeyType</code> ：可以是任何内置类型，或者bytes和字符串。不允许使用引用类型或复杂对象</li>
 <li><code>_ValueType</code> ： 可以是任何类型</li>
@@ -417,121 +183,39 @@ contract test &#123;
 <li>映射的数据位置(data location)只能是storage，通常用于状态变量</li>
 <li>映射可以标记为public，Solidity 自动为它创建getter</li>
 </ul>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract LedgerBalance &#123;
-   mapping(address =&gt; uint) public balances;
-
-   function updateBalance(uint newBalance) public &#123;
-      balances[msg.sender] = newBalance;
-   &#125;
-&#125;
-contract Updater &#123;
-   function updateBalance() public returns (uint) &#123;
-      LedgerBalance ledgerBalance = new LedgerBalance();
-      ledgerBalance.updateBalance(10);
-      return ledgerBalance.balances(address(this));
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract LedgerBalance &#123;</span><br><span class="line">   mapping(address =&gt; uint) public balances;</span><br><span class="line"></span><br><span class="line">   function updateBalance(uint newBalance) public &#123;</span><br><span class="line">      balances[msg.sender] = newBalance;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">contract Updater &#123;</span><br><span class="line">   function updateBalance() public returns (uint) &#123;</span><br><span class="line">      LedgerBalance ledgerBalance = new LedgerBalance();</span><br><span class="line">      ledgerBalance.updateBalance(10);</span><br><span class="line">      return ledgerBalance.balances(address(this));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对示例代码写一点自己的理解：</p>
 <p>address是不可被运算的数据类型，因此需要map映射为uint，再参与运算</p>
 <p><strong>类型转换</strong></p>
 <p>可以使用构造函数语法，显式地将数据类型转换为另一种类型。</p>
-<pre class="solidity"><code>int8 y = -3;
-uint x = uint(y);
-//Now x = 0xfffff..fd == 在256bit长度的格式下，-3的补码表示</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int8 y = -3;</span><br><span class="line">uint x = uint(y);</span><br><span class="line">//Now x = 0xfffff..fd == 在256bit长度的格式下，-3的补码表示</span><br></pre></td></tr></table></figure>
 <p>转换成更小的类型，会丢失高位。</p>
-<pre class="solidity"><code>uint32 a = 0x12345678;
-uint16 b = uint16(a); // b = 0x5678</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uint32 a = 0x12345678;</span><br><span class="line">uint16 b = uint16(a); // b = 0x5678</span><br></pre></td></tr></table></figure>
 <p>转换成更大的类型，将向左侧添加填充位。</p>
-<pre class="solidity"><code>uint16 a = 0x1234;
-uint32 b = uint32(a); // b = 0x00001234</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uint16 a = 0x1234;</span><br><span class="line">uint32 b = uint32(a); // b = 0x00001234</span><br></pre></td></tr></table></figure>
 <p>转换到更小的字节类型，会丢失后面数据。</p>
-<pre class="solidity"><code>bytes2 a = 0x1234;
-bytes1 b = bytes1(a); // b = 0x12</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bytes2 a = 0x1234;</span><br><span class="line">bytes1 b = bytes1(a); // b = 0x12</span><br></pre></td></tr></table></figure>
 <p>转换为更大的字节类型时，向右添加填充位。</p>
-<pre class="solidity"><code>bytes2 a = 0x1234;
-bytes4 b = bytes4(a); // b = 0x12340000</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bytes2 a = 0x1234;</span><br><span class="line">bytes4 b = bytes4(a); // b = 0x12340000</span><br></pre></td></tr></table></figure>
 <p>只有当字节类型和int类型大小相同时，才可以进行转换。</p>
-<pre class="solidity"><code>bytes2 a = 0x1234;
-uint32 b = uint16(a); // b = 0x00001234
-uint32 c = uint32(bytes4(a)); // c = 0x12340000
-uint8 d = uint8(uint16(a)); // d = 0x34
-uint8 e = uint8(bytes1(a)); // e = 0x12</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bytes2 a = 0x1234;</span><br><span class="line">uint32 b = uint16(a); // b = 0x00001234</span><br><span class="line">uint32 c = uint32(bytes4(a)); // c = 0x12340000</span><br><span class="line">uint8 d = uint8(uint16(a)); // d = 0x34</span><br><span class="line">uint8 e = uint8(bytes1(a)); // e = 0x12</span><br></pre></td></tr></table></figure>
 <p>把整数赋值给整型时，不能超出范围，发生截断，否则会报错。</p>
-<pre class="solidity"><code>uint8 a = 12; // no error
-uint32 b = 1234; // no error
-uint16 c = 0x123456; // error, 有截断，变为 0x3456</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">uint8 a = 12; // no error</span><br><span class="line">uint32 b = 1234; // no error</span><br><span class="line">uint16 c = 0x123456; // error, 有截断，变为 0x3456</span><br></pre></td></tr></table></figure>
 <p><strong>以太单位</strong></p>
 <p>Solidity
 中，以太币的单位可以使用<code>wei</code>、<code>finney</code>、<code>szabo</code>或<code>ether</code>表示。</p>
 <p>最小的单位是<code>wei</code>。<code>1e12</code>表示<code>1 x 10^12</code>。</p>
-<pre class="solidity"><code>assert(1 wei == 1);
-assert(1 szabo == 1e12);
-assert(1 finney == 1e15);
-assert(1 ether == 1e18);</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">assert(1 wei == 1);</span><br><span class="line">assert(1 szabo == 1e12);</span><br><span class="line">assert(1 finney == 1e15);</span><br><span class="line">assert(1 ether == 1e18);</span><br></pre></td></tr></table></figure>
 <p><strong>函数</strong></p>
 <p>语法：</p>
-<pre class="solidity"><code>function function-name(parameter-list) scope returns() &#123;
-   //语句
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function function-name(parameter-list) scope returns() &#123;</span><br><span class="line">   //语句</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>return语句可以返回多个值</p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Test &#123;
-   function getResult() public view returns(uint product, uint sum)&#123;
-      uint a = 1; // 局部变量
-      uint b = 2;
-      product = a * b; // 使用返回参数返回值
-      sum = a + b; // 使用返回参数返回值
-
-      // 也可以使用return返回多个值
-      // return(a*b, a+b);
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Test &#123;</span><br><span class="line">   function getResult() public view returns(uint product, uint sum)&#123;</span><br><span class="line">      uint a = 1; // 局部变量</span><br><span class="line">      uint b = 2;</span><br><span class="line">      product = a * b; // 使用返回参数返回值</span><br><span class="line">      sum = a + b; // 使用返回参数返回值</span><br><span class="line"></span><br><span class="line">      // 也可以使用return返回多个值</span><br><span class="line">      // return(a*b, a+b);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>修饰符：</p>
 <p>函数修饰符用于修改函数的行为。例如，向函数添加条件限制。</p>
 <p>修饰符定义中出现特殊符号<code>_</code>
 的地方，用于插入函数体。如果在调用此函数时，满足了修饰符的条件，则执行该函数，否则将抛出异常。</p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Owner &#123;
-   address owner;
-
-   constructor() public &#123;
-      owner = msg.sender;
-   &#125;
-
-   // 定义修饰符 onlyOwner 不带参数
-   modifier onlyOwner &#123;
-      require(msg.sender == owner);
-      _;
-   &#125;
-
-   // 定义修饰符 costs 带参数
-   modifier costs(uint price) &#123;
-      if (msg.value &gt;= price) &#123;
-         _;
-      &#125;
-   &#125;
-&#125;
-
-contract Register is Owner &#123;
-   mapping (address =&gt; bool) registeredAddresses;
-   uint price;
-
-   constructor(uint initialPrice) public &#123; price = initialPrice; &#125;
-
-   // 使用修饰符 costs
-   function register() public payable costs(price) &#123;
-      registeredAddresses[msg.sender] = true;
-   &#125;
-
-   // 使用修饰符 onlyOwner
-   function changePrice(uint _price) public onlyOwner &#123;
-      price = _price;
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Owner &#123;</span><br><span class="line">   address owner;</span><br><span class="line"></span><br><span class="line">   constructor() public &#123;</span><br><span class="line">      owner = msg.sender;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   // 定义修饰符 onlyOwner 不带参数</span><br><span class="line">   modifier onlyOwner &#123;</span><br><span class="line">      require(msg.sender == owner);</span><br><span class="line">      _;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   // 定义修饰符 costs 带参数</span><br><span class="line">   modifier costs(uint price) &#123;</span><br><span class="line">      if (msg.value &gt;= price) &#123;</span><br><span class="line">         _;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract Register is Owner &#123;</span><br><span class="line">   mapping (address =&gt; bool) registeredAddresses;</span><br><span class="line">   uint price;</span><br><span class="line"></span><br><span class="line">   constructor(uint initialPrice) public &#123; price = initialPrice; &#125;</span><br><span class="line"></span><br><span class="line">   // 使用修饰符 costs</span><br><span class="line">   function register() public payable costs(price) &#123;</span><br><span class="line">      registeredAddresses[msg.sender] = true;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   // 使用修饰符 onlyOwner</span><br><span class="line">   function changePrice(uint _price) public onlyOwner &#123;</span><br><span class="line">      price = _price;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>其中<code>onlyOwner</code>和<code>costs</code>是修饰符</p>
 <p>view(视图)函数：</p>
 <p>View(视图)函数不会修改状态。如果函数中存在以下语句，则被视为修改状态，编译器将抛出警告。</p>
@@ -546,16 +230,7 @@ contract Register is Owner &#123;
 <li>使用包含某些操作码的内联程序集。</li>
 </ul>
 <p>Getter方法是默认的视图函数。声明视图函数，可以在函数声明里，添加<code>view</code>关键字。</p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Test &#123;
-   function getResult() public view returns(uint product, uint sum)&#123;
-      uint a = 1; // 局部变量
-      uint b = 2;
-      product = a * b;
-      sum = a + b; 
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Test &#123;</span><br><span class="line">   function getResult() public view returns(uint product, uint sum)&#123;</span><br><span class="line">      uint a = 1; // 局部变量</span><br><span class="line">      uint b = 2;</span><br><span class="line">      product = a * b;</span><br><span class="line">      sum = a + b; </span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>pure(纯)函数：</p>
 <p>Pure(纯)函数<strong>不读取</strong>或修改状态。如果函数中存在以下语句，则被视为读取状态，编译器将抛出警告。</p>
 <ul>
@@ -568,16 +243,7 @@ contract Test &#123;
 </ul>
 <p>如果发生错误，纯函数可以使用<code>revert()</code>和<code>require()</code>函数来还原潜在的状态更改。</p>
 <p>声明纯函数，可以在函数声明里，添加<code>pure</code>关键字。</p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Test &#123;
-   function getResult() public pure returns(uint product, uint sum)&#123;
-      uint a = 1; 
-      uint b = 2;
-      product = a * b;
-      sum = a + b; 
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Test &#123;</span><br><span class="line">   function getResult() public pure returns(uint product, uint sum)&#123;</span><br><span class="line">      uint a = 1; </span><br><span class="line">      uint b = 2;</span><br><span class="line">      product = a * b;</span><br><span class="line">      sum = a + b; </span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>fallback(回退)函数：</p>
 <p>fallback(回退) 函数是合约中的特殊函数。它有以下特点</p>
 <ul>
@@ -590,60 +256,12 @@ contract Test &#123;
 <li>如果没有被标记为<code>payable</code>，则当合约收到无数据的以太币转账时，将抛出异常。</li>
 </ul>
 <p>语法</p>
-<pre class="solidity"><code>// 没有名字，没有参数，不返回，标记为external，可以标记为payable
-function() external &#123;
-    // statements
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 没有名字，没有参数，不返回，标记为external，可以标记为payable</span><br><span class="line">function() external &#123;</span><br><span class="line">    // statements</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>下面的示例展示了合约中的回退函数概念。</p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Test &#123;
-   uint public x ;
-   function() external &#123; x = 1; &#125;    
-&#125;
-contract Sink &#123;
-   function() external payable &#123; &#125;
-&#125;
-contract Caller &#123;
-
-   function callTest(Test test) public returns (bool) &#123;
-      (bool success,) = address(test).call(abi.encodeWithSignature(&quot;nonExistingFunction()&quot;));
-      require(success);
-      // test.x 是 1
-
-      address payable testPayable = address(uint160(address(test)));
-
-      // 发送以太测试合同,
-      // 转账将失败，也就是说，这里返回false。
-      return (testPayable.send(2 ether));
-   &#125;
-
-   function callSink(Sink sink) public returns (bool) &#123;
-      address payable sinkPayable = address(sink);
-      return (sinkPayable.send(2 ether));
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Test &#123;</span><br><span class="line">   uint public x ;</span><br><span class="line">   function() external &#123; x = 1; &#125;    </span><br><span class="line">&#125;</span><br><span class="line">contract Sink &#123;</span><br><span class="line">   function() external payable &#123; &#125;</span><br><span class="line">&#125;</span><br><span class="line">contract Caller &#123;</span><br><span class="line"></span><br><span class="line">   function callTest(Test test) public returns (bool) &#123;</span><br><span class="line">      (bool success,) = address(test).call(abi.encodeWithSignature(&quot;nonExistingFunction()&quot;));</span><br><span class="line">      require(success);</span><br><span class="line">      // test.x 是 1</span><br><span class="line"></span><br><span class="line">      address payable testPayable = address(uint160(address(test)));</span><br><span class="line"></span><br><span class="line">      // 发送以太测试合同,</span><br><span class="line">      // 转账将失败，也就是说，这里返回false。</span><br><span class="line">      return (testPayable.send(2 ether));</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   function callSink(Sink sink) public returns (bool) &#123;</span><br><span class="line">      address payable sinkPayable = address(sink);</span><br><span class="line">      return (sinkPayable.send(2 ether));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>函数重载</strong></p>
 <p>同一个作用域内，相同函数名可以定义多个函数。这些函数的参数(参数类型或参数数量)必须不一样。仅仅是返回值不一样不被允许</p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Test &#123;
-   function getSum(uint a, uint b) public pure returns(uint)&#123;      
-      return a + b;
-   &#125;
-   function getSum(uint a, uint b, uint c) public pure returns(uint)&#123;      
-      return a + b + c;
-   &#125;
-   function callSumWithTwoArguments() public pure returns(uint)&#123;
-      return getSum(1,2);
-   &#125;
-   function callSumWithThreeArguments() public pure returns(uint)&#123;
-      return getSum(1,2,3);
-   &#125;
-&#125;
-
-//0: uint256: 3
-//0: uint256: 6</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Test &#123;</span><br><span class="line">   function getSum(uint a, uint b) public pure returns(uint)&#123;      </span><br><span class="line">      return a + b;</span><br><span class="line">   &#125;</span><br><span class="line">   function getSum(uint a, uint b, uint c) public pure returns(uint)&#123;      </span><br><span class="line">      return a + b + c;</span><br><span class="line">   &#125;</span><br><span class="line">   function callSumWithTwoArguments() public pure returns(uint)&#123;</span><br><span class="line">      return getSum(1,2);</span><br><span class="line">   &#125;</span><br><span class="line">   function callSumWithThreeArguments() public pure returns(uint)&#123;</span><br><span class="line">      return getSum(1,2,3);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//0: uint256: 3</span><br><span class="line">//0: uint256: 6</span><br></pre></td></tr></table></figure>
 <p><strong>数学函数</strong></p>
 <p>Solidity提供内置的数学函数，如：</p>
 <ul>
@@ -663,16 +281,7 @@ r – 签名的前32字节; s: 签名的第二个32字节; v:
 签名的最后一个字节。这个方法返回一个地址。</li>
 </ul>
 <p><strong>合约继承</strong></p>
-<pre class="solidity"><code>pragma solidity ^0.8.0;
-
-contract A &#123;
-   ...
-&#125;
-
-contract B is A &#123;
-   ...
-&#125;
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.8.0;</span><br><span class="line"></span><br><span class="line">contract A &#123;</span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract B is A &#123;</span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><strong>构造函数</strong></p>
 <p>构造函数是使用<code>construct</code>关键字声明的特殊函数，用于初始化合约的状态变量。合约中构造函数是可选的，可以省略。</p>
 <p>构造函数有以下重要特性：</p>
@@ -684,59 +293,22 @@ contract B is A &#123;
 <li>内部构造函数将合约标记为抽象合约。</li>
 <li>如果没有定义构造函数，则使用默认构造函数。</li>
 </ul>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Test &#123;
-   constructor() public &#123;&#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Test &#123;</span><br><span class="line">   constructor() public &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>如果基合约具有带参数的构造函数，则每个派生/继承的合约也都必须包含参数。</li>
 <li>可以使用下面的方法直接初始化基构造函数</li>
 </ul>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Base &#123;
-   uint data;
-   constructor(uint _data) public &#123;
-      data = _data;
-   &#125;
-&#125;
-contract Derived is Base (5) &#123;
-   constructor() public &#123;&#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Base &#123;</span><br><span class="line">   uint data;</span><br><span class="line">   constructor(uint _data) public &#123;</span><br><span class="line">      data = _data;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">contract Derived is Base (5) &#123;</span><br><span class="line">   constructor() public &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>可以使用以下方法间接初始化基构造函数</li>
 </ul>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Base &#123;
-   uint data;
-   constructor(uint _data) public &#123;
-      data = _data;
-   &#125;
-&#125;
-contract Derived is Base &#123;
-   constructor(uint _info) Base(_info * _info) public &#123;&#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Base &#123;</span><br><span class="line">   uint data;</span><br><span class="line">   constructor(uint _data) public &#123;</span><br><span class="line">      data = _data;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">contract Derived is Base &#123;</span><br><span class="line">   constructor(uint _info) Base(_info * _info) public &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>不允许直接或间接地初始化基合约构造函数。</li>
 <li>如果派生合约没有将参数传递给基合约构造函数，则派生合约将成为抽象合约。</li>
 </ul>
 <p><strong>抽象合约</strong></p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Calculator &#123;
-   function getResult() public view returns(uint);
-&#125;
-
-contract Test is Calculator &#123;
-   function getResult() public view returns(uint) &#123;
-      uint a = 1;
-      uint b = 2;
-      uint result = a + b;
-      return result;
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Calculator &#123;</span><br><span class="line">   function getResult() public view returns(uint);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract Test is Calculator &#123;</span><br><span class="line">   function getResult() public view returns(uint) &#123;</span><br><span class="line">      uint a = 1;</span><br><span class="line">      uint b = 2;</span><br><span class="line">      uint result = a + b;</span><br><span class="line">      return result;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>接口</strong></p>
 <p>接口类似于抽象合约，使用<code>interface</code>关键字创建，接口只能包含抽象函数，不能包含函数实现。以下是接口的关键特性：</p>
 <ul>
@@ -745,21 +317,7 @@ contract Test is Calculator &#123;
 <li>接口不能有状态变量。</li>
 <li>接口可以包含enum、struct定义，可以使用<code>interface_name.</code>访问它们。</li>
 </ul>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-interface Calculator &#123;
-   function getResult() external view returns(uint);
-&#125;
-
-contract Test is Calculator &#123;
-   constructor() public &#123;&#125;
-   function getResult() external view returns(uint)&#123;
-      uint a = 1; 
-      uint b = 2;
-      uint result = a + b;
-      return result;
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">interface Calculator &#123;</span><br><span class="line">   function getResult() external view returns(uint);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract Test is Calculator &#123;</span><br><span class="line">   constructor() public &#123;&#125;</span><br><span class="line">   function getResult() external view returns(uint)&#123;</span><br><span class="line">      uint a = 1; </span><br><span class="line">      uint b = 2;</span><br><span class="line">      uint result = a + b;</span><br><span class="line">      return result;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>库</strong></p>
 <p>Solidity中，对库的使用有一定的限制。以下是库的主要特征。</p>
 <ul>
@@ -772,36 +330,10 @@ target="_blank" rel="noopener" href="https://www.qikegu.com/docs/4961">视图函
 <li>库不能被继承。</li>
 </ul>
 <p>使用library声明，使用<code>&lt;library_name&gt;.&lt;func_name&gt;</code></p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-library Search &#123;
-   function indexOf(uint[] storage self, uint value) public view returns (uint) &#123;
-      for (uint i = 0; i &lt; self.length; i++) if (self[i] == value) return i;
-      return uint(-1);
-   &#125;
-&#125;
-contract Test &#123;
-   uint[] data;
-   constructor() public &#123;
-      data.push(1);
-      data.push(2);
-      data.push(3);
-      data.push(4);
-      data.push(5);
-   &#125;
-   function isValuePresent() external view returns(uint)&#123;
-      uint value = 4;
-
-      // 使用库函数搜索数组中是否存在值
-      uint index = Search.indexOf(data, value);
-      return index;
-   &#125;
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">library Search &#123;</span><br><span class="line">   function indexOf(uint[] storage self, uint value) public view returns (uint) &#123;</span><br><span class="line">      for (uint i = 0; i &lt; self.length; i++) if (self[i] == value) return i;</span><br><span class="line">      return uint(-1);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">contract Test &#123;</span><br><span class="line">   uint[] data;</span><br><span class="line">   constructor() public &#123;</span><br><span class="line">      data.push(1);</span><br><span class="line">      data.push(2);</span><br><span class="line">      data.push(3);</span><br><span class="line">      data.push(4);</span><br><span class="line">      data.push(5);</span><br><span class="line">   &#125;</span><br><span class="line">   function isValuePresent() external view returns(uint)&#123;</span><br><span class="line">      uint value = 4;</span><br><span class="line"></span><br><span class="line">      // 使用库函数搜索数组中是否存在值</span><br><span class="line">      uint index = Search.indexOf(data, value);</span><br><span class="line">      return index;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>****使用汇编(Assembly)代码****</p>
 <p>使用内联汇编，可以在solidity中嵌入汇编代码，使用</p>
-<pre class="solidity"><code>assembly&#123;
-    ...
-&#125;</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">assembly&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>事件</strong></p>
 <p>事件是智能合约发出的信号。智能合约的前端UI，例如，DApps、web.js，或者任何与Ethereum
 JSON-RPC
@@ -812,248 +344,5 @@ API连接的东西，都可以侦听这些事件。事件可以被索引，以�
 </blockquote>
 <p>Solidity中可以使用<code>event</code>关键字(在用法上类似于<code>function</code>关键字)。然后可以在函数中使用<code>emit</code>关键字触发事件</p>
 <p>创建合约并发出一个事件</p>
-<pre class="solidity"><code>pragma solidity ^0.5.0;
-
-contract Counter &#123;
-    uint256 public count = 0;
-
-    event Increment(address who);   // 声明事件
-
-    function increment() public &#123;
-        emit Increment(msg.sender); // 触发事件
-        count += 1;
-    &#125;
-&#125;</code></pre>
-  </div>
-  
-    
-      <a id="older" class="blog-nav" href="/2023/02/05/%E8%AE%B0%E4%B8%80%E4%B8%AANTRU%E6%9D%BF%E5%AD%90%E9%A2%98/">OLDER&nbsp;&gt;</a>
-      
-        
-          <a id="newer" class="blog-nav" href="/2023/07/11/AES%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%80%97%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98/">&lt;&nbsp;NEWER</a>
-          
-            
-</div>
-        <div class="footer">
-  
-    <div class="footer-more">
-      
-        <a target="_blank" rel="noopener" href="https://github.com/leedom92/hexo-theme-leedom">Powered by Hexo</a>
-        
-    </div>
-  
-</div>
-
-      </div>
-
-      <div class="back-to-top hidden">
-  <a href="javascript: void(0)">
-    <i class="iconfont icon-chevronup"></i>
-  </a>
-</div>
-
-
-<script src="/js/backtotop.js"></script>
-
-
-
-      
-  <div class="search-icon" id="search-icon">
-    <a href="javascript: void(0)">
-      <i class="iconfont icon-search"></i>
-    </a>
-  </div>
-
-  <div class="search-overlay hidden">
-    <div class="search-content" tabindex="0">
-      <div class="search-box">
-        <div class="search-title">
-          <!-- <span class="search-icon-input">
-            <a href="javascript: void(0)">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </span> -->
-          
-            <input type="text" class="search-input" id="search-input" placeholder="搜索">
-          
-          <span class="search-close-icon" id="search-close-icon">
-            <a href="javascript: void(0)">
-              <i class="iconfont icon-close"></i>
-            </a>
-          </span>
-        </div>
-        <div class="search-result" id="search-result"></div>
-      </div>
-    </div>
-  </div>
-
-  <script type="text/javascript">
-    var inputArea = document.querySelector("#search-input")
-    var searchOverlayArea = document.querySelector(".search-overlay")
-
-    // inputArea.onclick = function() {
-    //   getSearchFile()
-    //   this.onclick = null
-    // }
-
-    inputArea.onkeydown = function() {
-      if(event.keyCode == 13)
-        return false
-    }
-
-    function openOrHideSearchContent() {
-      let isHidden = searchOverlayArea.classList.contains('hidden')
-      if (isHidden) {
-        searchOverlayArea.classList.remove('hidden')
-        document.body.classList.add('hidden')
-        inputArea.focus()
-        getSearchFile()
-      } else {
-        searchOverlayArea.classList.add('hidden')
-        document.body.classList.remove('hidden')
-      }
-    }
-
-    function blurSearchContent(e) {
-      if (e.target === searchOverlayArea) {
-        openOrHideSearchContent()
-      }
-    }
-
-    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
-    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
-    searchOverlayArea.addEventListener("click", blurSearchContent, false)
-
-    var searchFunc = function (path, search_id, content_id) {
-      'use strict';
-      var $input = document.getElementById(search_id);
-      var $resultContent = document.getElementById(content_id);
-      $resultContent.innerHTML = "<ul><span class='local-search-empty'><span></ul>";
-      // $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
-      $.ajax({
-        // 0x01. load xml file
-        url: path,
-        dataType: "xml",
-        success: function (xmlResponse) {
-          // 0x02. parse xml file
-          var datas = $("entry", xmlResponse).map(function () {
-            return {
-              title: $("title", this).text(),
-              content: $("content", this).text(),
-              url: $("url", this).text()
-            };
-          }).get();
-          $resultContent.innerHTML = "";
-
-          $input.addEventListener('input', function () {
-            // 0x03. parse query to keywords list
-            var str = '<ul class=\"search-result-list\">';
-            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-            $resultContent.innerHTML = "";
-            if (this.value.trim().length <= 0) {
-              return;
-            }
-            // 0x04. perform local searching
-            datas.forEach(function (data) {
-              var isMatch = true;
-              var content_index = [];
-              if (!data.title || data.title.trim() === '') {
-                data.title = "Untitled";
-              }
-              var orig_data_title = data.title.trim();
-              var data_title = orig_data_title.toLowerCase();
-              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
-              var data_content = orig_data_content.toLowerCase();
-              var data_url = data.url;
-              var index_title = -1;
-              var index_content = -1;
-              var first_occur = -1;
-              // only match artiles with not empty contents
-              if (data_content !== '') {
-                keywords.forEach(function (keyword, i) {
-                  index_title = data_title.indexOf(keyword);
-                  index_content = data_content.indexOf(keyword);
-
-                  if (index_title < 0 && index_content < 0) {
-                    isMatch = false;
-                  } else {
-                    if (index_content < 0) {
-                      index_content = 0;
-                    }
-                    if (i == 0) {
-                      first_occur = index_content;
-                    }
-                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
-                  }
-                });
-              } else {
-                isMatch = false;
-              }
-              // 0x05. show search results
-              if (isMatch) {
-                str += "<li><a href='" + data_url + "' class='search-result-title'><h2>" + orig_data_title + "</h2></a>";
-                var content = orig_data_content;
-                if (first_occur >= 0) {
-                  // cut out 100 characters
-                  var start = first_occur - 20;
-                  var end = first_occur + 80;
-
-                  if (start < 0) {
-                    start = 0;
-                  }
-
-                  if (start == 0) {
-                    end = 100;
-                  }
-
-                  if (end > content.length) {
-                    end = content.length;
-                  }
-
-                  var match_content = content.substr(start, end);
-
-                  // highlight all keywords
-                  keywords.forEach(function (keyword) {
-                    var regS = new RegExp(keyword, "gi");
-                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
-                  });
-
-                  str += "<h3 class=\"search-result-abstract\">" + match_content + "...</h3>"
-                }
-                str += "<hr></li>";
-              }
-            });
-            str += "</ul>";
-            if (str.indexOf('<li>') === -1) {
-              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
-            }
-            $resultContent.innerHTML = str;
-          });
-        },
-        error: function(xhr, status, error) {
-          $resultContent.innerHTML = ""
-          if (xhr.status === 404) {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/leedom92/hexo-theme-leedom#configuration' target='_black'>configuration</a><span></ul>";
-          } else {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
-          }
-        }
-      });
-      $(document).on('click', '#search-close-icon', function() {
-        $('#search-input').val('');
-        $('#search-result').html('');
-      });
-    }
-
-    var getSearchFile = function() {
-        var path = "/search.xml";
-        searchFunc(path, 'search-input', 'search-result');
-    }
-  </script>
-
-
-
-
-    </div>
-  </body>
-</html>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.5.0;</span><br><span class="line"></span><br><span class="line">contract Counter &#123;</span><br><span class="line">    uint256 public count = 0;</span><br><span class="line"></span><br><span class="line">    event Increment(address who);   // 声明事件</span><br><span class="line"></span><br><span class="line">    function increment() public &#123;</span><br><span class="line">        emit Increment(msg.sender); // 触发事件</span><br><span class="line">        count += 1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div><nav class="pagination"><a id="left-navigator" href="/2023/07/11/AES%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%80%97%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98/">AES相关功耗分析问题</a><a id="right-navigator" href="/2023/02/05/%E8%AE%B0%E4%B8%80%E4%B8%AANTRU%E6%9D%BF%E5%AD%90%E9%A2%98/">记一个NTRU板子题</a></nav></div><nav id="footer"><ul id="footer-links"><li><a href="/about" class="zn">关于</a></li><li><a href="/archives" class="zn">所有文章</a></li></ul></nav></div></body></html>
