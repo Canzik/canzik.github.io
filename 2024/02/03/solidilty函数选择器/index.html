@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="author" content="Canzik"><meta name="desciption" content="世界上只有一种真正的英雄主义，那就是在认清生活的真相后依然热爱生活。"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>solidilty_selector</title><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/normalize/3.0.3/normalize.min.css"><link rel="stylesheet" type="text/css" href="/css/carbon.css"><script defer="defer" src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script><script defer="defer" src="//cdn.jsdelivr.net/jquery.pjax/1.9.5/jquery.pjax.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.css" type="text/css" media="screen"><script defer="defer" type="text/javascript" src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>var performFancybox = true;</script><script>var doRenderMath = 'mathjax'</script><!--mathjax config similar to math.stackexchange--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: true
+  }
+});</script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  }
+});</script><script async type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script defer="defer" src="/js/carbon.js"></script><meta name="generator" content="Hexo 6.0.0"></head><body><div id="container"><div id="banner"><h1 id="site-title"><a href="/">Canzik's Blog</a></h1><p id="site-subtitle"></p></div><div id="content"><div class="meta"><h2 class="article-title"><a href="/2024/02/03/solidilty%E5%87%BD%E6%95%B0%E9%80%89%E6%8B%A9%E5%99%A8">solidilty_selector</a></h2><div class="article-date"><a href="javascript:void(0);" class="extra-switch">2024-02-03</a></div></div><div class="extra"><span class="Tags">Tags: <a href="/tags/Blockchain/">Blockchain</a>.</span></div><div class="extra"><span class="Categories">Categories: <a href="/categories/notes/">notes</a>.</span></div><div class="article-content"><div class="gallery"></div><h2 id="calldata">calldata</h2>
+<p>调用智能合约的本质，是向目标合约发送了一段calldata</p>
+<p>为了便于理解，这里用一个简单的合约做示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity ^0.8.0;</span><br><span class="line"></span><br><span class="line">contract Add &#123;</span><br><span class="line">    uint public c;</span><br><span class="line"></span><br><span class="line">    function cal(uint a, uint b) public returns(uint) &#123;</span><br><span class="line">        c = a * b;</span><br><span class="line">        return c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>部署合约后，为cal函数传入2和3两个参数，calldata如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0xdc2e7b3300000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003</span><br></pre></td></tr></table></figure>
+<p>一段calldata可被分为两个部分：前4字节和后32字节。</p>
+<ul>
+<li><p>前四字节为函数选择器（selector）：<code>0xdc2e7b33</code></p></li>
+<li><p>后32字节为输入的参数：<code>0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003</code></p></li>
+</ul>
+<p>msg.data是solidity中的一个全局变量，值为完整的calldata。calldata实际上就是告诉目标合约，我要调用哪个函数，以及参数是什么</p>
+<h2 id="method-id">method id</h2>
+<p>method id定义为函数签名的Keccak256哈希后的前四个字节，当method
+id和selector匹配上时，代表调用该函数</p>
+<p>计算示例里的函数签名</p>
+<figure>
+<img
+src="https://cdn.jsdelivr.net/gh/Canzik/pic_for_blog@main/img/image-20240203194113088.png"
+alt="image-20240203194113088" />
+<figcaption aria-hidden="true">image-20240203194113088</figcaption>
+</figure>
+<p>前四字节为<code>0xdc2e7b33</code></p>
+<p><strong>在函数签名中，uint 和 int 要写成 uint256 和
+int256</strong></p>
+<p>使用 selector 调用目标函数时，只用将目标函数的 method id 作为
+selector 和参数打包，用<code>abi.encodeWithSelector</code>编码，传给
+call 函数</p>
+</div><nav class="pagination"><a id="right-navigator" href="/2023/11/02/ParadigmCTF2023-Oven/">ParadigmCTF2023-Oven</a></nav></div><nav id="footer"><ul id="footer-links"><li><a href="/about" class="zn">关于</a></li><li><a href="/archives" class="zn">所有文章</a></li></ul></nav></div></body></html>
